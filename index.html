@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>So I'm Becoming an Adult… Now What?</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf7f2;
+    --warm-white: #fff9f2;
+    --ink: #1a1208;
+    --brown: #5c3d1e;
+    --amber: #d4821a;
+    --amber-light: #f5c76a;
+    --amber-pale: #fdeec8;
+    --sage: #7a9e7e;
+    --rust: #c25c2a;
+    --nav-height: 64px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 64px 40px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(212,130,26,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 75% 20%, rgba(122,158,126,0.12) 0%, transparent 55%);
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    position: relative;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--amber-light);
+  }
+  .hero p {
+    margin-top: 16px;
+    font-size: 1.05rem;
+    font-weight: 300;
+    opacity: 0.75;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    border-bottom: 2px solid var(--amber);
+    height: var(--nav-height);
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 16px;
+    min-width: max-content;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: rgba(250,247,242,0.7);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0 14px;
+    height: var(--nav-height);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--amber-light);
+  }
+  .nav-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 14px; right: 14px;
+    height: 2px;
+    background: var(--amber-light);
+  }
+  .nav-btn .caret {
+    font-size: 0.65rem;
+    opacity: 0.6;
+  }
+
+  /* ── DROPDOWN ── */
+  .dropdown {
+    position: relative;
+  }
+  .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: calc(var(--nav-height) - 2px);
+    left: 0;
+    background: var(--ink);
+    border: 1px solid rgba(212,130,26,0.4);
+    border-top: 2px solid var(--amber);
+    min-width: 200px;
+    z-index: 200;
+    padding: 6px 0;
+  }
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    display: block;
+  }
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: rgba(250,247,242,0.75);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    text-align: left;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+  }
+  .dropdown-menu button:hover {
+    background: rgba(212,130,26,0.15);
+    color: var(--amber-light);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .section-intro {
+    margin-top: 16px;
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #4a3520;
+    border-left: 3px solid var(--amber-light);
+    padding-left: 18px;
+  }
+
+  /* ── FAQ ── */
+  .faq-list { margin-top: 36px; }
+  .faq-item {
+    border-bottom: 1px solid rgba(90,60,30,0.12);
+  }
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 20px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.0rem;
+    font-weight: 600;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--amber); }
+  .faq-question .icon {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--amber);
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+  .faq-item.open .faq-question .icon { transform: rotate(45deg); }
+  .faq-answer {
+    display: none;
+    padding: 0 0 22px 0;
+    font-size: 0.96rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #3d2e18;
+  }
+  .faq-item.open .faq-answer { display: block; }
+  .faq-answer ul {
+    margin: 10px 0 0 18px;
+  }
+  .faq-answer li {
+    margin-bottom: 6px;
+  }
+
+  /* HOME special layout */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 32px;
+  }
+  .home-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(90,60,30,0.12);
+    border-radius: 6px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .home-card:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(90,60,30,0.1);
+  }
+  .home-card .emoji { font-size: 1.6rem; margin-bottom: 8px; }
+  .home-card .card-title { font-weight: 600; font-size: 0.92rem; }
+  .home-card .card-sub { font-size: 0.78rem; color: #7a5c30; margin-top: 4px; font-weight: 300; }
+
+  footer {
+    text-align: center;
+    padding: 32px;
+    font-size: 0.78rem;
+    color: #8a7055;
+    border-top: 1px solid rgba(90,60,30,0.1);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>So I'm Becoming an Adult…<br><em>Now What?</em></h1>
+  <p>Everything they forgot to teach you. Honest answers for every corner of independent life.</p>
+</div>
+
+<nav>
+  <div class="nav-inner" id="navInner">
+
+    <button class="nav-btn active" data-target="home">🏠 Home</button>
+
+    <!-- Money & Work -->
+    <div class="dropdown">
+      <button class="nav-btn">💰 Money & Work <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="taxes">Taxes</button>
+        <button data-target="banks">Banking & Credit</button>
+        <button data-target="work">Work / Jobs</button>
+        <button data-target="budgeting">Budgeting</button>
+      </div>
+    </div>
+
+    <!-- Home Life -->
+    <div class="dropdown">
+      <button class="nav-btn">🏡 Home Life <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="living">Living Accommodations</button>
+        <button data-target="moving">Moving</button>
+        <button data-target="cleaning">Cleaning</button>
+        <button data-target="laundry">Laundry</button>
+        <button data-target="cooking">Cooking</button>
+      </div>
+    </div>
+
+    <!-- Getting Around -->
+    <div class="dropdown">
+      <button class="nav-btn">🚗 Getting Around <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="driving">Driving</button>
+        <button data-target="transportation">Transportation</button>
+        <button data-target="travel">Travel</button>
+      </div>
+    </div>
+
+    <!-- Health & Body -->
+    <div class="dropdown">
+      <button class="nav-btn">💪 Health & Body <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="hygiene">Hygiene</button>
+        <button data-target="gym">Gym & Fitness</button>
+        <button data-target="mentalhealth">Mental Health</button>
+        <button data-target="firstaid">General First Aid</button>
+        <button data-target="nutrition">Nutrition</button>
+      </div>
+    </div>
+
+    <!-- Relationships -->
+    <div class="dropdown">
+      <button class="nav-btn">❤️ Relationships <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="dating">Dating</button>
+        <button data-target="interaction">Human Interaction</button>
+        <button data-target="marriage">Marriage</button>
+        <button data-target="children">Children</button>
+      </div>
+    </div>
+
+    <!-- Style & Self -->
+    <div class="dropdown">
+      <button class="nav-btn">✨ Style & Self <span class="caret">▾</span></button>
+      <div class="dropdown-menu">
+        <button data-target="styling">Styling & Clothing</button>
+        <button data-target="hobbies">Hobbies</button>
+        <button data-target="digital">Digital Life</button>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div class="section active" id="home">
+  <div class="section-header">
+    <div class="section-label">Welcome</div>
+    <div class="section-title">Your adulting command centre.</div>
+    <p class="section-intro">Nobody hands you a manual when you turn 18. This guide covers the practical stuff — from doing your taxes to cooking a real meal, understanding a lease, surviving a job interview, and everything in between. Click any category below or use the navigation bar to get started.</p>
+  </div>
+  <div class="home-grid" id="homeGrid">
+    <div class="home-card" data-target="taxes"><div class="emoji">📋</div><div class="card-title">Taxes</div><div class="card-sub">Filing, deductions & refunds</div></div>
+    <div class="home-card" data-target="banks"><div class="emoji">🏦</div><div class="card-title">Banking & Credit</div><div class="card-sub">Accounts, credit scores & cards</div></div>
+    <div class="home-card" data-target="budgeting"><div class="emoji">💸</div><div class="card-title">Budgeting</div><div class="card-sub">Make your money work for you</div></div>
+    <div class="home-card" data-target="work"><div class="emoji">💼</div><div class="card-title">Work / Jobs</div><div class="card-sub">Resumes, interviews & pay</div></div>
+    <div class="home-card" data-target="living"><div class="emoji">🏠</div><div class="card-title">Living Accommodations</div><div class="card-sub">Leases, utilities & landlords</div></div>
+    <div class="home-card" data-target="moving"><div class="emoji">📦</div><div class="card-title">Moving</div><div class="card-sub">Planning & executing a move</div></div>
+    <div class="home-card" data-target="cooking"><div class="emoji">🍳</div><div class="card-title">Cooking</div><div class="card-sub">Feed yourself well</div></div>
+    <div class="home-card" data-target="cleaning"><div class="emoji">🧹</div><div class="card-title">Cleaning</div><div class="card-sub">Keep a tidy home</div></div>
+    <div class="home-card" data-target="laundry"><div class="emoji">👕</div><div class="card-title">Laundry</div><div class="card-sub">Wash without disasters</div></div>
+    <div class="home-card" data-target="driving"><div class="emoji">🚗</div><div class="card-title">Driving</div><div class="card-sub">Licenses, insurance & cars</div></div>
+    <div class="home-card" data-target="transportation"><div class="emoji">🚌</div><div class="card-title">Transportation</div><div class="card-sub">Getting around without a car</div></div>
+    <div class="home-card" data-target="travel"><div class="emoji">✈️</div><div class="card-title">Travel</div><div class="card-sub">Plan trips like a pro</div></div>
+    <div class="home-card" data-target="hygiene"><div class="emoji">🧴</div><div class="card-title">Hygiene</div><div class="card-sub">Looking and feeling your best</div></div>
+    <div class="home-card" data-target="gym"><div class="emoji">🏋️</div><div class="card-title">Gym & Fitness</div><div class="card-sub">Starting a healthy routine</div></div>
+    <div class="home-card" data-target="mentalhealth"><div class="emoji">🧠</div><div class="card-title">Mental Health</div><div class="card-sub">Taking care of your mind</div></div>
+    <div class="home-card" data-target="firstaid"><div class="emoji">🩹</div><div class="card-title">General First Aid</div><div class="card-sub">Handle common emergencies</div></div>
+    <div class="home-card" data-target="nutrition"><div class="emoji">🥗</div><div class="card-title">Nutrition</div><div class="card-sub">Eating well on a budget</div></div>
+    <div class="home-card" data-target="dating"><div class="emoji">💕</div><div class="card-title">Dating</div><div class="card-sub">Modern romance basics</div></div>
+    <div class="home-card" data-target="interaction"><div class="emoji">🤝</div><div class="card-title">Human Interaction</div><div class="card-sub">Socializing, networking & conflict</div></div>
+    <div class="home-card" data-target="marriage"><div class="emoji">💍</div><div class="card-title">Marriage</div><div class="card-sub">What to know before you commit</div></div>
+    <div class="home-card" data-target="children"><div class="emoji">👶</div><div class="card-title">Children</div><div class="card-sub">Thinking about starting a family</div></div>
+    <div class="home-card" data-target="styling"><div class="emoji">👗</div><div class="card-title">Styling & Clothing</div><div class="card-sub">Build a functional wardrobe</div></div>
+    <div class="home-card" data-target="hobbies"><div class="emoji">🎨</div><div class="card-title">Hobbies</div><div class="card-sub">Making time for what you love</div></div>
+    <div class="home-card" data-target="digital"><div class="emoji">📱</div><div class="card-title">Digital Life</div><div class="card-sub">Online security & smart habits</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TAXES ═══════════════ -->
+<div class="section" id="taxes">
+  <div class="section-header">
+    <div class="section-label">Money & Work</div>
+    <div class="section-title">Taxes</div>
+    <p class="section-intro">Taxes are the government's share of your income — and understanding them is one of the most powerful adulting skills you can have. The good news: for most young adults, filing is simpler than it looks, and doing it right can even put money back in your pocket.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">Do I have to file taxes if I'm a young adult or student?<span class="icon">+</span></button><div class="faq-answer">Generally, you must file if your income exceeds the standard deduction for the year (around $13,850 for single filers in 2023). Even if you don't have to, you should file if taxes were withheld from your paycheck — that's how you get a refund. Students with part-time jobs, freelance income, or scholarships that exceed tuition may all have filing requirements.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between a W-2 and a 1099?<span class="icon">+</span></button><div class="faq-answer">A W-2 comes from an employer and shows how much you earned and how much was already withheld for taxes. A 1099 comes when you do freelance, contract, or gig work — no taxes are withheld, so you're responsible for paying them yourself. You might receive both in the same year if you had multiple income sources.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a tax refund and why do people get one?<span class="icon">+</span></button><div class="faq-answer">A refund means the government withheld more from your paychecks than you actually owed. You're getting your own money back — it's not a bonus. If you consistently get large refunds, consider adjusting your W-4 withholding so you take home more each paycheck instead of giving the government an interest-free loan.</div></div>
+    <div class="faq-item"><button class="faq-question">What is the standard deduction and should I use it?<span class="icon">+</span></button><div class="faq-answer">The standard deduction is a flat amount that reduces your taxable income (about $13,850 for single filers in 2023). Most young adults should take it because it's simpler and often larger than itemizing individual deductions. You'd only itemize if your deductible expenses (mortgage interest, large charitable donations, etc.) exceed the standard amount.</div></div>
+    <div class="faq-item"><button class="faq-question">What free tools can I use to file my taxes?<span class="icon">+</span></button><div class="faq-answer">The IRS Free File program allows taxpayers earning under $79,000 to file for free through partner software. Many young adults also qualify for free filing through TurboTax, H&R Block, or FreeTaxUSA. The IRS also has a Direct File option for simple returns. Avoid paying for premium services unless your taxes are genuinely complicated.</div></div>
+    <div class="faq-item"><button class="faq-question">What happens if I miss the tax deadline?<span class="icon">+</span></button><div class="faq-answer">The standard deadline is April 15. If you miss it, you can file for a free 6-month extension (to October 15), but an extension to file is NOT an extension to pay — interest and penalties accrue on any taxes owed from April 15. If you're owed a refund, there's no penalty for filing late, but it's still good practice to file on time.</div></div>
+    <div class="faq-item"><button class="faq-question">Can I still be claimed as a dependent on my parents' taxes?<span class="icon">+</span></button><div class="faq-answer">Possibly — if you're under 19, or a full-time student under 24, and your parents provide more than half your financial support, they may still claim you. This affects your own filing: you can't claim yourself as a dependent, and the standard deduction rules differ. Make sure you coordinate with your parents to avoid double-claiming.</div></div>
+    <div class="faq-item"><button class="faq-question">What are tax brackets and how do they actually work?<span class="icon">+</span></button><div class="faq-answer">The US uses a progressive tax system. You don't pay your "bracket rate" on all your income — you pay different rates on different portions. For example, in 2023 you pay 10% on the first ~$11,000, 12% on the next chunk, 22% on the next, and so on. Your "marginal rate" is only applied to the income above each threshold, not your whole paycheck.</div></div>
+    <div class="faq-item"><button class="faq-question">What deductions or credits can young adults typically claim?<span class="icon">+</span></button><div class="faq-answer">Common ones include: the Student Loan Interest Deduction (up to $2,500), the American Opportunity Tax Credit for college students (up to $2,500), the Earned Income Tax Credit if you earn below a threshold, and the Retirement Savings Contributions Credit (Saver's Credit) if you contribute to a 401(k) or IRA. Credits are more valuable than deductions — they directly reduce your tax bill.</div></div>
+    <div class="faq-item"><button class="faq-question">How do self-employment and freelance taxes work?<span class="icon">+</span></button><div class="faq-answer">If you earn over $400 from freelance work, you must file a Schedule SE and pay self-employment tax (~15.3%) on top of regular income tax. Freelancers are expected to make quarterly estimated tax payments (due April, June, September, and January) to avoid underpayment penalties. You can deduct business-related expenses (home office, equipment, software) to reduce what you owe.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do if I made a mistake on my tax return?<span class="icon">+</span></button><div class="faq-answer">File an amended return using IRS Form 1040-X. You have up to 3 years from the original filing deadline to amend for a refund. If you owe more money, it's best to correct it sooner to minimize interest. The IRS is generally understanding about honest errors, and fixing them proactively avoids audits or penalties down the line.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ BANKS ═══════════════ -->
+<div class="section" id="banks">
+  <div class="section-header">
+    <div class="section-label">Money & Work</div>
+    <div class="section-title">Banking & Credit</div>
+    <p class="section-intro">Your relationship with money starts with understanding banks and credit. A good credit score opens doors — lower loan rates, easier apartment applications, even some jobs. Learning these basics early gives you a massive head start.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What's the difference between a checking and savings account?<span class="icon">+</span></button><div class="faq-answer">A checking account is for everyday spending — you pay bills, use a debit card, and receive direct deposits here. A savings account is for money you don't need immediately; it earns a small amount of interest and is meant to build an emergency fund or save for goals. Keeping them separate helps prevent accidentally spending money you're trying to save.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a credit score and why does it matter?<span class="icon">+</span></button><div class="faq-answer">A credit score (usually 300–850) is a number that represents how reliably you repay borrowed money. Lenders use it to decide whether to give you loans and at what interest rate. Landlords check it before renting to you. Some employers check it for finance-related jobs. A score above 700 is generally considered good; above 750 is very good. Building it early is one of the best financial moves you can make.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I build credit if I have no credit history?<span class="icon">+</span></button><div class="faq-answer">Start with a secured credit card (you deposit money as collateral) or become an authorized user on a parent's card. Student credit cards are also designed for beginners. The key is to charge small amounts and pay the full balance every month. After 6–12 months of on-time payments, your score will start building and you can graduate to better cards.</div></div>
+    <div class="faq-item"><button class="faq-question">What factors affect my credit score?<span class="icon">+</span></button><div class="faq-answer">Payment history (35%) is the biggest factor — never miss a payment. Credit utilization (30%) — try to use less than 30% of your available credit limit. Length of credit history (15%) — older accounts help. Credit mix (10%) — having different types (card + loan) helps slightly. New inquiries (10%) — each hard inquiry when you apply for credit temporarily dips your score a few points.</div></div>
+    <div class="faq-item"><button class="faq-question">Should I pay off my credit card in full every month?<span class="icon">+</span></button><div class="faq-answer">Yes, always if possible. Credit cards charge 20–30% APR interest, which compounds fast. Carrying a balance is one of the most expensive financial mistakes you can make. Pay the full statement balance (not just the minimum) each month. If you can't pay in full, pay as much as possible and stop adding new charges until it's cleared.</div></div>
+    <div class="faq-item"><button class="faq-question">What's an emergency fund and how much should I have?<span class="icon">+</span></button><div class="faq-answer">An emergency fund is cash set aside for unexpected expenses — job loss, car repair, medical bills. The standard advice is 3–6 months of living expenses. When you're just starting out, even $500–$1,000 in savings makes a huge difference. Keep it in a high-yield savings account (HYSA) where it earns more interest than a regular savings account.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the best types of bank accounts for young adults?<span class="icon">+</span></button><div class="faq-answer">Look for accounts with no monthly fees, no minimum balance requirements, and a large ATM network. Online banks (like Ally, Marcus, SoFi, or Chime) typically offer better interest rates and lower fees than traditional banks. For daily spending, a no-fee checking account. For savings, a high-yield savings account (HYSA) with 4–5% APY is much better than the 0.01% most big banks offer.</div></div>
+    <div class="faq-item"><button class="faq-question">What is APR and APY?<span class="icon">+</span></button><div class="faq-answer">APR (Annual Percentage Rate) is the yearly interest rate you pay when borrowing — used on credit cards and loans. APY (Annual Percentage Yield) is what you earn on savings, factoring in compounding. When you borrow, you want a low APR. When you save or invest, you want a high APY. Always read the fine print before opening financial products.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a 401(k) and should I start contributing at my first job?<span class="icon">+</span></button><div class="faq-answer">A 401(k) is a tax-advantaged retirement account offered by many employers. Contributions are pre-tax (reducing your taxable income now) and grow tax-deferred. If your employer offers a match — say, 50% of your contributions up to 6% of salary — always contribute enough to get the full match. That's an immediate 50% return on your money, which no investment can beat.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do if my debit card or card info is stolen?<span class="icon">+</span></button><div class="faq-answer">Call your bank or card issuer immediately (number on the back of your card) to freeze and cancel the card. Report the unauthorized transactions — federal law limits your liability to $50 for credit cards and $500 for debit cards if reported promptly. File a report at IdentityTheft.gov if your personal info was compromised. Consider placing a free credit freeze at Equifax, Experian, and TransUnion to prevent new accounts from being opened in your name.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ BUDGETING ═══════════════ -->
+<div class="section" id="budgeting">
+  <div class="section-header">
+    <div class="section-label">Money & Work</div>
+    <div class="section-title">Budgeting</div>
+    <p class="section-intro">Budgeting isn't about restriction — it's about direction. When you tell your money where to go, you stop wondering where it went. Even a simple budget can be the difference between financial stress and financial freedom.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What's the simplest budgeting method for beginners?<span class="icon">+</span></button><div class="faq-answer">The 50/30/20 rule is a great starting point: 50% of after-tax income goes to needs (rent, food, utilities, transport), 30% to wants (dining out, entertainment, subscriptions), and 20% to savings and debt repayment. It's flexible and doesn't require tracking every penny. As you get more comfortable, you can refine it.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I figure out my actual monthly expenses?<span class="icon">+</span></button><div class="faq-answer">Go through your last 2–3 months of bank and credit card statements and categorize every expense. Most banking apps do this automatically. Include irregular expenses by dividing their annual cost by 12 (e.g., $240/year for a subscription = $20/month to budget). Many people are surprised to find significant spending on food delivery or subscriptions they forgot about.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between gross and net income?<span class="icon">+</span></button><div class="faq-answer">Gross income is what you earn before taxes and deductions. Net income (take-home pay) is what actually hits your bank account after taxes, health insurance, and retirement contributions are removed. Always budget based on your net income — that's the money you actually have to work with.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I avoid lifestyle inflation when I get a raise?<span class="icon">+</span></button><div class="faq-answer">Lifestyle inflation is when spending rises as fast as income, leaving you no better off financially. A good rule: when you get a raise, automatically increase your savings or investment contributions by at least 50% of the raise before you adjust your lifestyle spending. Automate the transfer so you never see it in your checking account.</div></div>
+    <div class="faq-item"><button class="faq-question">What apps are best for tracking spending?<span class="icon">+</span></button><div class="faq-answer">Popular options include YNAB (You Need A Budget) — great for zero-based budgeting; Mint — free and links all your accounts; Copilot — clean design with smart categorization; and simple spreadsheets (Google Sheets has free budget templates) for those who prefer manual control. The best app is the one you'll actually use consistently.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I budget when my income is irregular (freelance/gig)?<span class="icon">+</span></button><div class="faq-answer">Budget based on your lowest expected monthly income, not your average. In good months, put the extra into savings as a buffer. Pay yourself a consistent "salary" from your business account to smooth out fluctuations. Keep a larger emergency fund (6+ months) to handle slow periods. Track quarterly income to identify patterns and plan accordingly.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between wants and needs in a budget?<span class="icon">+</span></button><div class="faq-answer">Needs are non-negotiable for basic survival: housing, utilities, basic groceries, essential transportation, and minimum debt payments. Wants are everything else: restaurants, streaming, new clothes, vacations. The tricky part is that many "needs" have want-level versions — you need housing, but choosing a luxury apartment is a want. Honest categorization is the foundation of a realistic budget.</div></div>
+    <div class="faq-item"><button class="faq-question">How should I prioritize paying off debt vs. saving?<span class="icon">+</span></button><div class="faq-answer">A general priority order: (1) Build a small emergency fund ($500–$1,000). (2) Capture any employer 401(k) match — it's free money. (3) Pay off high-interest debt (credit cards, 15%+ APR) aggressively. (4) Build emergency fund to 3–6 months. (5) Invest for retirement. Low-interest debt (under 5% APR) can be paid minimally while investing, since markets historically return more than that rate.</div></div>
+    <div class="faq-item"><button class="faq-question">What are sinking funds and why are they useful?<span class="icon">+</span></button><div class="faq-answer">A sinking fund is money you save monthly for a known future expense — car registration, holiday gifts, travel, new phone. Divide the expected cost by the months until you need it and save that amount monthly. This prevents large "surprise" expenses from blowing your budget, even though they were completely predictable. It's one of the most underrated budgeting tools.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I stop impulse buying?<span class="icon">+</span></button><div class="faq-answer">Use a 24–48 hour rule: add items to your cart or wishlist but don't buy immediately. Most impulse urges fade quickly. Unsubscribe from retailer emails and remove saved payment info to add friction. Give yourself a monthly "fun money" budget you can spend guilt-free — this actually reduces the psychological urge to splurge because you're not feeling deprived.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ WORK ═══════════════ -->
+<div class="section" id="work">
+  <div class="section-header">
+    <div class="section-label">Money & Work</div>
+    <div class="section-title">Work / Jobs</div>
+    <p class="section-intro">The working world has its own rules that nobody explicitly teaches. From navigating your first interview to understanding a pay stub, negotiating salary, and building relationships at work — these skills compound over an entire career.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I write a resume with little to no experience?<span class="icon">+</span></button><div class="faq-answer">Lead with a strong summary statement, then highlight education, relevant coursework, volunteer work, internships, and even significant extracurriculars. Use action verbs and quantify achievements where possible ("managed a team of 4," "increased social media following by 40%"). A clean one-page format using a simple, readable template is better than a fancy over-designed one. Tailor it for each job application.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I prepare for a job interview?<span class="icon">+</span></button><div class="faq-answer">Research the company thoroughly — know their products, mission, and recent news. Prepare answers to common questions ("Tell me about yourself," "Why do you want this role?") using the STAR method (Situation, Task, Action, Result). Prepare 3–5 smart questions to ask them. Dress one level above the company's expected dress code. Arrive 5–10 minutes early and bring printed copies of your resume.</div></div>
+    <div class="faq-item"><button class="faq-question">Should I negotiate my salary and how?<span class="icon">+</span></button><div class="faq-answer">Yes — always negotiate. Most employers expect it. Research the role's market rate on Glassdoor, LinkedIn Salary, or Levels.fyi. Ask for 10–15% above your target to leave room. Say something like: "I'm very excited about this role. Based on my research and experience, I was hoping for $X — is there flexibility there?" Over a career, negotiating each offer can add hundreds of thousands of dollars in cumulative earnings.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I read my first pay stub?<span class="icon">+</span></button><div class="faq-answer">Your pay stub shows gross pay (before deductions), then deductions including federal and state taxes, Social Security (6.2%), Medicare (1.45%), and any health insurance or retirement contributions. Net pay is what you receive. Check that your withholdings match your W-4 elections. If something looks wrong, contact HR — payroll errors do happen.</div></div>
+    <div class="faq-item"><button class="faq-question">What is at-will employment?<span class="icon">+</span></button><div class="faq-answer">Most US private-sector jobs are at-will, meaning either you or your employer can end the employment relationship at any time, for almost any legal reason, without advance notice. This means you can quit without a reason and your employer can let you go without specific cause. Exceptions include discrimination, retaliation for whistleblowing, or contractual agreements. Always read your employment contract carefully.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about employee benefits?<span class="icon">+</span></button><div class="faq-answer">Beyond salary, evaluate: health insurance (premium costs, deductibles, network), dental and vision, 401(k) match (free money — maximize it), paid time off (PTO), sick days, remote work flexibility, parental leave, and professional development budgets. Benefits can be worth $10,000–$30,000+ in additional compensation annually. Don't evaluate an offer based on salary alone.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I handle a toxic workplace or difficult boss?<span class="icon">+</span></button><div class="faq-answer">Document everything — save emails, note dates of incidents. Try addressing issues directly and professionally with your manager first. If that fails, escalate to HR or your manager's supervisor. Know your rights: harassment and discrimination are illegal. Start job searching quietly if the situation is genuinely unhealthy. Leaving a bad job is sometimes the most rational career move, especially early on.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a professional reference and how do I ask for one?<span class="icon">+</span></button><div class="faq-answer">A reference is someone who can speak to your work quality — typically a past manager, professor, or supervisor. Ask before listing them: "I'm applying for X position — would you be comfortable serving as a reference and speaking positively about my work?" Give them your updated resume and notes on the job. Keep your reference relationships warm even when you're not job searching.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I ask for a raise?<span class="icon">+</span></button><div class="faq-answer">Timing matters: ask during a performance review, after a win, or during a good stretch for the company — not during budget cuts or layoffs. Bring data: document your accomplishments, impact, and market salary comparisons. Frame it as a conversation: "I've really enjoyed growing here and I'm proud of what I've contributed. I'd like to discuss my compensation — I've done some research and feel $X reflects my current value." Be prepared to hear "not now" and ask what would get you there.</div></div>
+    <div class="faq-item"><button class="faq-question">What is networking and why does it matter?<span class="icon">+</span></button><div class="faq-answer">Networking is building genuine professional relationships — not collecting business cards or spamming LinkedIn. Studies consistently show that 70–80% of jobs are filled through connections. Attend industry events, join professional associations, reach out to people for informational interviews, and maintain relationships by congratulating people on milestones. Give before you ask — share useful articles, make introductions, offer help before you need it.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ LIVING ═══════════════ -->
+<div class="section" id="living">
+  <div class="section-header">
+    <div class="section-label">Home Life</div>
+    <div class="section-title">Living Accommodations</div>
+    <p class="section-intro">Finding, renting, and maintaining a place to live is one of the biggest logistical challenges of early adulthood. Knowing your rights as a tenant and understanding a lease before you sign can save you thousands — and serious headaches.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What should I look for when touring an apartment?<span class="icon">+</span></button><div class="faq-answer">Check water pressure, outlets, cell service, and natural light. Test all appliances. Look for signs of pests, mold, or water damage (stains on ceilings/walls). Ask about laundry access, parking, guest policies, and noise levels at different times of day. Visit at night to gauge neighborhood safety. Ask current tenants about their experience if you can. Don't sign the same day — sleep on it.</div></div>
+    <div class="faq-item"><button class="faq-question">What does a lease actually say and what should I watch out for?<span class="icon">+</span></button><div class="faq-answer">A lease is a binding legal contract. Read every word before signing. Key things to check: lease duration, monthly rent and when it's due, security deposit amount and return conditions, pet policies and fees, subletting rules, early termination penalties, notice required to vacate, who pays which utilities, and rules about alterations (painting, hanging things). Anything verbal your landlord promises should be added in writing to the lease.</div></div>
+    <div class="faq-item"><button class="faq-question">How much should I budget for rent?<span class="icon">+</span></button><div class="faq-answer">The traditional rule is to keep rent under 30% of gross monthly income. In high-cost cities, 40% is more realistic for many people. Beyond rent, factor in utilities (electricity, gas, water, internet), renter's insurance (~$15–30/month), and any parking fees. Moving costs, security deposits, and first/last month's rent means you need 2–4x one month's rent saved before you move in.</div></div>
+    <div class="faq-item"><button class="faq-question">What is renter's insurance and do I need it?<span class="icon">+</span></button><div class="faq-answer">Renter's insurance covers your personal belongings if they're stolen or damaged (fire, flood), and provides liability coverage if someone is injured in your home. Your landlord's insurance covers the building — not your stuff. At $15–30/month, it's one of the cheapest and most worthwhile insurance products. Many landlords now require it, and it's a no-brainer for the protection it provides.</div></div>
+    <div class="faq-item"><button class="faq-question">What can my landlord legally do with my security deposit?<span class="icon">+</span></button><div class="faq-answer">Landlords can deduct from your deposit for unpaid rent, significant cleaning costs, or damage beyond "normal wear and tear." They cannot deduct for regular wear (carpet getting slightly worn, small nail holes, faded paint). Document everything with timestamped photos before move-in AND after move-out. Most states require landlords to return your deposit within 14–30 days with an itemized list of deductions.</div></div>
+    <div class="faq-item"><button class="faq-question">What are tenant rights I should know?<span class="icon">+</span></button><div class="faq-answer">Tenants generally have the right to habitable conditions (working heat, plumbing, no infestation), notice before landlord entry (usually 24–48 hours except emergencies), freedom from illegal discrimination, and protection from retaliatory eviction. If your landlord violates these, contact your local housing authority or tenant rights organization. Tenant protections vary significantly by state and city — look up your local laws.</div></div>
+    <div class="faq-item"><button class="faq-question">Should I have roommates when I first move out?<span class="icon">+</span></button><div class="faq-answer">Having roommates can cut your housing costs by 30–50%, which can be the difference between being able to save money and going into debt. The key is setting clear expectations upfront — discuss cleaning responsibilities, guest policies, quiet hours, shared groceries, and how to handle shared expenses. A simple written roommate agreement (even informal) prevents many disputes.</div></div>
+    <div class="faq-item"><button class="faq-question">What utilities do I need to set up when I move in?<span class="icon">+</span></button><div class="faq-answer">Common utilities include: electricity, gas (if applicable), water/sewer (sometimes included in rent), internet, and renter's insurance. Some apartments include some utilities — always clarify before signing. Set up utilities before your move-in date so you're not moving in without power. Budget $100–$300/month for utilities depending on your location, apartment size, and energy habits.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between renting and buying a home?<span class="icon">+</span></button><div class="faq-answer">Renting offers flexibility, no maintenance responsibility, and lower upfront costs. Buying builds equity, offers stability, and has tax advantages, but requires a 10–20% down payment, closing costs, maintenance, and a long-term commitment to a location. For most young adults in their first years of independence, renting makes more financial sense. The "renting is throwing money away" argument is largely a myth — it depends heavily on the market and your circumstances.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I handle a landlord who won't make repairs?<span class="icon">+</span></button><div class="faq-answer">Document the issue with photos and dates. Submit repair requests in writing (email creates a paper trail). If the issue affects habitability (heat, plumbing, safety), your state likely requires repairs within a set timeframe. If they don't comply, options include: reporting to local housing authorities, requesting a rent reduction, "repair and deduct" (fix it yourself and deduct from rent — legal in some states), or terminating the lease. Always know your local tenant laws.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MOVING ═══════════════ -->
+<div class="section" id="moving">
+  <div class="section-header">
+    <div class="section-label">Home Life</div>
+    <div class="section-title">Moving</div>
+    <p class="section-intro">Moving is stressful, but it's also one of the great adventures of adulthood. Whether it's your first apartment or a cross-country relocation, planning ahead makes the difference between an exciting new chapter and a chaotic nightmare.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How far in advance should I start planning a move?<span class="icon">+</span></button><div class="faq-answer">Ideally, start 6–8 weeks out for a local move and 3–4 months for a long-distance move. Key milestones: 2 months before — secure your new place and book movers or a moving truck. 6 weeks — start decluttering and collect packing supplies. 4 weeks — begin packing non-essentials, update your address with important institutions. 1 week — pack essentials last, confirm all logistics.</div></div>
+    <div class="faq-item"><button class="faq-question">Is it cheaper to hire movers or rent a truck?<span class="icon">+</span></button><div class="faq-answer">Renting a truck (U-Haul, Budget, Penske) is typically 50–70% cheaper than hiring full-service movers. For a local one-bedroom move, a truck rental might cost $100–300, while movers can run $500–1,500+. For long-distance or heavy/large items, movers or a freight container service (PODS) may be worth it. Get 3+ quotes and read reviews carefully — moving scams exist.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I update my address when I move?<span class="icon">+</span></button><div class="faq-answer">File a change of address with USPS at usps.com (costs $1.10 to verify identity). Then notify: your employer, bank and credit cards, IRS (Form 8822), voter registration, driver's license/DMV, doctor/dentist, insurance providers, subscriptions, and any friends/family. Update your address for online shopping accounts too. Start this process 2–4 weeks before your move date.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the best way to pack efficiently?<span class="icon">+</span></button><div class="faq-answer">Pack room by room. Label every box with contents AND destination room. Pack heavy items in small boxes, lighter items in large boxes. Use clothing, towels, and linens to wrap fragile items instead of buying bubble wrap. Pack an "open first" box with essentials: phone charger, toilet paper, a change of clothes, snacks, and any items you'll need the first night. Don't leave packing until the last minute.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I move on a tight budget?<span class="icon">+</span></button><div class="faq-answer">Get free boxes from liquor stores, grocery stores, Craigslist, or Facebook Marketplace. Borrow a friend's truck (offer pizza and cash). Move mid-week and mid-month — prices are lower. Sell or donate items before moving to reduce your load. If moving long distance, shipping boxes via Greyhound Package Express or Amtrak can be surprisingly affordable for smaller loads.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do before leaving my old place?<span class="icon">+</span></button><div class="faq-answer">Do a final walkthrough and document the condition of every room with photos and video. Clean thoroughly (kitchen appliances, bathroom, floors). Remove all personal items from every closet, cabinet, and storage area. Return all keys and garage openers. Get written confirmation of your move-out and the date your landlord received the keys. This documentation protects your security deposit.</div></div>
+    <div class="faq-item"><button class="faq-question">What do I need to do when I first arrive in a new city?<span class="icon">+</span></button><div class="faq-answer">Within 30 days: update your driver's license and vehicle registration with your new state DMV (required by law in most states). Register to vote at your new address. Find a new primary care doctor, dentist, and pharmacy. Get familiar with your neighborhood — find the nearest grocery store, pharmacy, emergency room, and transit stops. Introduce yourself to neighbors, which both builds community and provides safety awareness.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I move safely as someone living alone?<span class="icon">+</span></button><div class="faq-answer">Don't advertise your move publicly (don't post your new address on social media). Change the locks when you move into a new place — landlords should provide this, but if not, it's worth the $50–100. Meet your neighbors early. Set up renter's insurance before moving in. If hiring movers, get licensed, insured companies through verified review sites. Trust your instincts about the neighborhood and building security.</div></div>
+    <div class="faq-item"><button class="faq-question">What items should I buy first for a new apartment?<span class="icon">+</span></button><div class="faq-answer">Essentials first: shower curtain and rings, toilet paper, a basic toolset, cleaning supplies, trash cans, light bulbs, hangers, and command strips. Kitchen basics: a good knife, cutting board, skillet, pot, and basic pantry staples. Don't rush to furnish everything at once — use Facebook Marketplace, thrift stores, and IKEA for affordable starter pieces. Sleep on an air mattress temporarily rather than going into debt for furniture.</div></div>
+    <div class="faq-item"><button class="faq-question">What home maintenance tasks should every renter know?<span class="icon">+</span></button><div class="faq-answer">Know how to: unclog a drain (plunger + drain snake), reset a tripped circuit breaker, replace a smoke alarm battery, shut off the water valve in an emergency, patch a small nail hole in a wall, and fix a running toilet (often just a flapper replacement). Know where your circuit breaker panel and water shut-off valve are located. These basic skills save you emergency call fees and keep your landlord relationship positive.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ COOKING ═══════════════ -->
+<div class="section" id="cooking">
+  <div class="section-header">
+    <div class="section-label">Home Life</div>
+    <div class="section-title">Cooking</div>
+    <p class="section-intro">Cooking for yourself is one of the most empowering skills you can develop. It's healthier, dramatically cheaper than eating out, and surprisingly satisfying once you build a little confidence. Start simple and build from there.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What are the essential kitchen tools a beginner needs?<span class="icon">+</span></button><div class="faq-answer">Start with the basics: one good chef's knife, a cutting board, a 10-inch skillet, a medium saucepan, a sheet pan, measuring cups and spoons, a wooden spoon and spatula, a colander, and a can opener. That's all you need to make 90% of meals. Add specialized tools only when a specific recipe calls for them. Quality over quantity — one good knife outperforms a block of cheap ones.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the first recipes a beginner should learn?<span class="icon">+</span></button><div class="faq-answer">Build a foundation of simple high-use recipes: scrambled eggs and an omelette, pasta with sauce, rice (learn to make it on the stovetop, not just in a rice cooker), roasted vegetables, stir-fry, a basic soup or chili, grilled or pan-cooked chicken, tacos, and a simple salad dressing. These 8–10 recipes will feed you well through your entire 20s while you expand.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I meal prep to save time and money during the week?<span class="icon">+</span></button><div class="faq-answer">Pick a 1–2 hour window on Sunday (or whatever day works). Cook a large batch of a grain (rice, quinoa), a protein (roasted chicken, hard-boiled eggs), and roasted vegetables. These "building blocks" can be mixed into bowls, wraps, salads, or soups throughout the week without eating the same meal repeatedly. Prep snacks too: cut fruit and vegetables, portion out nuts, or make overnight oats.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I know when food has gone bad?<span class="icon">+</span></button><div class="faq-answer">Trust your senses: unusual smell, visible mold, slimy texture, or off color are all signs to discard. Use-by dates are meaningful for dairy, meat, and deli items. Best-by dates on shelf-stable items (canned goods, dried pasta) are quality indicators, not safety cutoffs — these are often fine for months or years past. When in doubt, throw it out — food poisoning is not worth the savings.</div></div>
+    <div class="faq-item"><button class="faq-question">What pantry staples should I always have on hand?<span class="icon">+</span></button><div class="faq-answer">Core pantry: olive oil, salt, pepper, garlic (fresh or powder), onions, canned tomatoes, dried pasta, rice, canned beans, broth, soy sauce, and hot sauce. Fridge basics: eggs, butter, milk, lemon, and a versatile condiment like Dijon mustard. With these ingredients, you can improvise dozens of meals even when you haven't grocery shopped. Build this foundation first before anything specialty.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I grocery shop without overspending or wasting food?<span class="icon">+</span></button><div class="faq-answer">Plan meals before you shop and make a specific list — don't shop hungry. Buy store brands for pantry staples; they're nearly identical to name brands at lower cost. Focus fresh produce purchases on what you'll eat within the week. Frozen vegetables and fruits are nutritionally equivalent to fresh and reduce waste significantly. Check your fridge and pantry before each shop to avoid buying duplicates.</div></div>
+    <div class="faq-item"><button class="faq-question">What cooking techniques should every beginner learn?<span class="icon">+</span></button><div class="faq-answer">Master: sautéing (cooking quickly in a hot pan with oil), roasting (dry heat in the oven for depth of flavor), boiling and simmering (pasta, eggs, soups), and pan-searing (getting a crust on proteins). Understanding heat control is everything — most beginner mistakes come from heat being too high or too low. Learn to taste as you cook and adjust seasoning. Mise en place (having everything prepped before you start) makes cooking far less stressful.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I store leftovers safely?<span class="icon">+</span></button><div class="faq-answer">Cool food within 2 hours before refrigerating — hot food directly in the fridge raises the internal temperature and risks spoiling other items. Use airtight containers; glass containers are best. Most cooked food keeps 3–4 days in the fridge. Freeze anything you won't eat within that window. Label containers with the date. Never refreeze raw meat that has been thawed, and reheat leftovers to 165°F (steaming hot throughout).</div></div>
+    <div class="faq-item"><button class="faq-question">How do I cook chicken safely?<span class="icon">+</span></button><div class="faq-answer">The only safe way to know chicken is done is temperature: cook to an internal temperature of 165°F, measured with a meat thermometer in the thickest part. Do not rely on color alone — pink doesn't always mean undercooked, and white doesn't always mean done. Never wash raw chicken (it spreads bacteria). Use separate cutting boards for raw poultry and produce. Wash hands thoroughly after handling raw chicken.</div></div>
+    <div class="faq-item"><button class="faq-question">What are easy ways to make healthy food taste better?<span class="icon">+</span></button><div class="faq-answer">Fat carries flavor: a drizzle of good olive oil or pat of butter at the end transforms vegetables. Acid brightens dishes: add lemon juice or vinegar to finish soups, salads, and proteins. Toast spices in a dry pan before using them. Roast vegetables instead of steaming — caramelization creates depth. Salt properly throughout cooking, not just at the end. Fresh herbs added at the end of cooking add aroma and freshness that dried herbs can't replicate.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ CLEANING ═══════════════ -->
+<div class="section" id="cleaning">
+  <div class="section-header">
+    <div class="section-label">Home Life</div>
+    <div class="section-title">Cleaning</div>
+    <p class="section-intro">A clean home isn't about perfection — it's about maintaining a baseline that supports your mental health, physical health, and sense of control. Once you develop simple systems, cleaning becomes automatic rather than overwhelming.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How often should I actually clean different parts of my home?<span class="icon">+</span></button><div class="faq-answer">Daily: dishes, counters, quick tidying. Weekly: vacuum/mop, wipe down bathroom surfaces, toilet, mirrors, take out trash, change dish towels. Every 2 weeks: scrub the shower/tub, wipe kitchen appliances. Monthly: clean the inside of the microwave and oven, wipe baseboards, wash bedding (though sheets ideally every 1–2 weeks). Quarterly: deep clean the fridge, clean windows, wipe inside cabinets. Yearly: clean behind appliances, wash curtains.</div></div>
+    <div class="faq-item"><button class="faq-question">What cleaning supplies do I actually need?<span class="icon">+</span></button><div class="faq-answer">The basics: an all-purpose cleaner (or DIY with dish soap + water + vinegar), toilet bowl cleaner, bathroom scrub (Bar Keepers Friend is excellent), glass cleaner, microfiber cloths, a scrub brush, a toilet brush, a broom or vacuum, and a mop. You don't need 15 specialized products — most surfaces can be cleaned with a good all-purpose spray and microfiber cloth. Simplicity means you'll actually clean.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the most efficient order to clean a room?<span class="icon">+</span></button><div class="faq-answer">Always clean top to bottom, left to right: dust high surfaces first (shelves, ceiling fans), then wipe mid-level surfaces, then counters, then clean the toilet/shower (bathroom), and vacuum or mop floors last. This way, any dust or debris falls to the floor before you clean it. Declutter before you clean — cleaning around piles is frustrating and ineffective.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I keep a clean home without spending hours on it?<span class="icon">+</span></button><div class="faq-answer">The "one-touch rule": put things away immediately rather than setting them down to deal with later. Do 10-minute daily tidying to prevent buildup. Follow the "if it takes less than 2 minutes, do it now" rule. Clean as you cook — wipe spills immediately, wash prep dishes while food cooks. Doing a little every day means you never face an overwhelming deep clean, and guests can come over without panic.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with mold in a bathroom or apartment?<span class="icon">+</span></button><div class="faq-answer">Small surface mold (on grout, caulk, or tile) can be treated with a bleach solution (1 cup bleach per gallon of water) or commercial mold spray. Wear gloves and ventilate the area. Dry surfaces thoroughly after treatment. Prevent recurrence by running the bathroom fan for 15–20 minutes after showering. Large mold patches (especially black mold), mold inside walls, or mold that keeps returning are landlord responsibilities — report them in writing.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the best way to clean a very dirty or neglected space?<span class="icon">+</span></button><div class="faq-answer">Break it into zones and tackle one at a time — trying to do everything at once leads to burnout. Start with the most used areas: kitchen and bathroom first. Do a first pass removing trash and obvious clutter before doing any actual cleaning. Put on music or a podcast. Set a timer for 20–30 minute sprints with short breaks. Be patient — a very dirty space took time to accumulate; it will take time to restore.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I clean appliances like an oven or microwave?<span class="icon">+</span></button><div class="faq-answer">Microwave: place a bowl of water with lemon juice inside and microwave for 3–5 minutes. The steam loosens splatters; wipe clean with a damp cloth. Oven: use the self-clean function if available, or apply a baking soda paste, leave overnight, and wipe off. Commercial oven cleaner (like Easy-Off) works for tough grease. Stovetop burners can be soaked in dish soap and hot water. Clean fridge shelves by removing and soaking in the sink.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I remove common stains (carpet, clothing, furniture)?<span class="icon">+</span></button><div class="faq-answer">Act fast — fresh stains are dramatically easier to remove than set-in ones. Blot, don't rub (rubbing spreads the stain). For most stains: cold water + dish soap. Coffee/tea: cold water first, then white vinegar. Red wine: club soda or salt immediately, then dish soap. Grease: dish soap directly, then rinse. For carpet, work from outside the stain inward. For stubborn or set stains, OxiClean or Hydrogen Peroxide can be effective on fabrics (test in an inconspicuous spot first).</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with a pest (roach, mouse, ant) problem?<span class="icon">+</span></button><div class="faq-answer">Prevention first: seal food in airtight containers, take out trash regularly, and eliminate entry points. For ants, track the trail to find the entry point and seal it; use ant bait traps (not spray — they need to carry poison back to the colony). Roaches require a systematic approach: gel bait stations, boric acid powder in corners, and potentially professional extermination for serious infestations. Mice need snap traps or electric traps plus sealing all entry points. Notify your landlord in writing for significant pest problems — they are legally required to address them.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I make my home smell fresh naturally?<span class="icon">+</span></button><div class="faq-answer">The root cause is always more important than masking: clean trash cans regularly, wash bedding weekly, clean the fridge, address mold, and ensure good ventilation. Natural fresheners: open windows regularly, simmer citrus peels and cinnamon in water on the stovetop, place baking soda boxes in the fridge and closets, use essential oil diffusers, and grow indoor plants. Avoid strong synthetic air fresheners that simply mask odors — they're often irritants and don't solve the source.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ LAUNDRY ═══════════════ -->
+<div class="section" id="laundry">
+  <div class="section-header">
+    <div class="section-label">Home Life</div>
+    <div class="section-title">Laundry</div>
+    <p class="section-intro">Laundry seems simple until you accidentally dye all your whites pink or shrink a favorite sweater. A little knowledge goes a long way toward keeping your clothes clean, lasting longer, and looking better.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I read clothing care labels?<span class="icon">+</span></button><div class="faq-answer">Care labels use symbols: a tub icon = washing (a number inside = max temperature in Celsius); a triangle = bleaching; a square = drying (circle inside = tumble dry); an iron = ironing; a circle = dry cleaning. Key ones to know: crossed-out tub = do not wash (dry clean only); crossed-out square with circle = do not tumble dry; crossed-out triangle = do not bleach. When in doubt, cold water and air dry is the safest option for most fabrics.</div></div>
+    <div class="faq-item"><button class="faq-question">Why should I separate laundry and how?<span class="icon">+</span></button><div class="faq-answer">Separate darks, lights, and whites to prevent color bleeding. Separate delicates (underwear, bras, silk, lightweight fabrics) from heavy items (jeans, towels) to prevent damage. Separate heavily soiled items from lightly soiled ones. At minimum, keep new dark-colored items away from everything else for the first few washes — new clothes bleed the most dye. A single red sock in a white load can ruin an entire wash.</div></div>
+    <div class="faq-item"><button class="faq-question">What water temperature should I use?<span class="icon">+</span></button><div class="faq-answer">Cold water is best for most everyday clothing — it prevents shrinking, fading, and color bleeding, and uses less energy. Warm water is suitable for moderately soiled items, synthetic fabrics, and permanent press items. Hot water should be reserved for heavily soiled items, white cotton, towels, and bedding/linens — it kills bacteria and removes grease but can shrink and fade clothing. When in doubt: cold.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I get stains out before washing?<span class="icon">+</span></button><div class="faq-answer">Pre-treat stains before washing — never put a stained item in the dryer, as heat sets stains permanently. Apply stain remover (Zout, Shout, OxiClean spray) to the stain and let it sit for 5–10 minutes before washing. For protein stains (blood, sweat, egg): cold water only — hot water sets them. For grease: dish soap directly on the stain. For ink: rubbing alcohol. Treat stains as quickly as possible for best results.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I prevent clothes from shrinking?<span class="icon">+</span></button><div class="faq-answer">Most shrinking happens in the dryer, not the washer. Use cold water and low heat or air-dry natural fibers (cotton, wool, linen). If you're unsure, air dry everything. For clothes labeled "pre-shrunk," they should be fine with normal washing, but repeated high heat will still cause gradual shrinkage. Wool and cashmere should always be hand-washed in cold water or dry cleaned and laid flat to dry.</div></div>
+    <div class="faq-item"><button class="faq-question">How much detergent should I use?<span class="icon">+</span></button><div class="faq-answer">Most people use 2–3x too much detergent. More is not better — excess detergent doesn't rinse out fully, leaving residue on clothes that can cause skin irritation and actually trap dirt over time. Follow the dosing instructions on your detergent for your load size and water hardness. HE (High Efficiency) machines require HE detergent because standard detergent creates too many suds. Pods are pre-measured and eliminate this issue.</div></div>
+    <div class="faq-item"><button class="faq-question">How often should I wash different types of clothing?<span class="icon">+</span></button><div class="faq-answer">T-shirts, underwear, socks: after every wear. Jeans: every 3–5 wears (excessive washing fades and weakens denim). Sweaters: every 2–3 wears. Bras: every 2–3 wears. Pajamas: every 3–4 wears. Towels: after 3–4 uses (hang to dry between uses). Bedsheets: every 1–2 weeks. Outerwear (jackets, coats): a few times per season. Over-washing wears out fabrics faster than necessary.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I care for special fabrics like wool, silk, or athletic wear?<span class="icon">+</span></button><div class="faq-answer">Wool: hand wash in cold water with wool-specific detergent (Woolite), gently squeeze (don't wring), and lay flat to dry. Silk: hand wash in cold water or delicate cycle in a mesh bag; air dry away from direct sunlight. Athletic/technical wear: cold water, no fabric softener (it clogs moisture-wicking fibers), and air dry when possible. Denim: turn inside out to preserve color; wash in cold water and air dry to maintain fit.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I keep white clothes white?<span class="icon">+</span></button><div class="faq-answer">Wash whites separately, always. Use the hottest water safe for the fabric. Add a scoop of OxiClean or oxygen bleach to your regular detergent — this is gentler than chlorine bleach and won't damage fabric fibers. Avoid chlorine bleach on synthetic fabrics. Air dry whites in sunlight when possible — the UV rays naturally brighten fabric. Don't let whites sit wet in the washer; they'll yellow. For yellowed whites, soak in OxiClean and warm water for several hours before washing.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the right way to fold and store clothes to make them last?<span class="icon">+</span></button><div class="faq-answer">Hang items prone to wrinkling: dress shirts, blazers, trousers, dresses. Fold knits and heavy items (sweaters, jeans, t-shirts) to avoid stretching on hangers. Use cedar blocks or lavender sachets in drawers to deter moths. Don't store clothes in plastic dry-cleaning bags long-term — they trap moisture. Clothes should be clean before storing for a season — even invisible oils and stains attract insects and can set permanently.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ DRIVING ═══════════════ -->
+<div class="section" id="driving">
+  <div class="section-header">
+    <div class="section-label">Getting Around</div>
+    <div class="section-title">Driving</div>
+    <p class="section-intro">Owning and operating a car is a major financial and practical responsibility. Beyond just knowing how to drive, understanding insurance, basic maintenance, and what to do in emergencies can save you money, time, and stress.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What car insurance coverage do I actually need?<span class="icon">+</span></button><div class="faq-answer">Liability coverage is required in most states (covers damage you cause to others). Beyond that: Collision (covers your car in an accident) and Comprehensive (covers theft, weather, vandalism) are wise if your car is worth more than $4,000. Uninsured motorist coverage is valuable because many drivers are underinsured. Skip gap insurance unless you financed a new car. Get quotes from multiple companies — rates vary wildly for identical coverage.</div></div>
+    <div class="faq-item"><button class="faq-question">What routine maintenance does a car need?<span class="icon">+</span></button><div class="faq-answer">Key maintenance milestones: oil change every 5,000–7,500 miles (modern synthetic oil, longer with manufacturer guidance), tire rotation every 5,000–7,500 miles, air filter every 15,000–30,000 miles, cabin air filter every 15,000–25,000 miles, tire pressure check monthly, brake inspection annually. Check your owner's manual for your specific car's schedule — it varies by make and model. Deferred maintenance leads to much more expensive repairs.</div></div>
+    <div class="faq-item"><button class="faq-question">What do I do if I get in a car accident?<span class="icon">+</span></button><div class="faq-answer">Check for injuries first and call 911 if anyone is hurt. Move vehicles out of traffic if safely possible. Never admit fault at the scene. Exchange: full name, contact info, insurance company and policy number, driver's license number, and license plate. Take photos of all vehicles, damage, the scene, and any road conditions. Get contact info from witnesses. File a police report — always have this for insurance purposes. Call your insurance company the same day.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I know when my car needs brake service?<span class="icon">+</span></button><div class="faq-answer">Warning signs: squealing or squeaking when braking (wear indicators doing their job), grinding metal sound (brake pads completely worn — stop driving immediately), car pulling to one side when braking, brake pedal pulsing or vibrating, spongy or unusually soft brake pedal, or the brake warning light illuminating. Don't delay brake repairs — this is a safety issue, and catching it early (at the squealing stage) is far cheaper than waiting until grinding.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with a flat tire?<span class="icon">+</span></button><div class="faq-answer">Pull safely off the road and turn on hazard lights. If you have a spare and tools: loosen lug nuts slightly before jacking the car, position the jack under the vehicle's frame near the flat tire, raise the car, remove lug nuts and tire, mount the spare, hand-tighten lug nuts in a star pattern, lower the car, then fully tighten. Temporary spare tires (donuts) max out at 50 mph and 50–70 miles. If you're not comfortable changing a tire, call roadside assistance (AAA, your insurance, or manufacturer roadside).</div></div>
+    <div class="faq-item"><button class="faq-question">Is it better to buy or lease a car?<span class="icon">+</span></button><div class="faq-answer">Buying (especially a reliable used car with cash or short loan) is almost always better financially long-term. Leasing means you're always making payments and never building equity. The cheapest way to own a car: buy a 2–4 year old reliable used vehicle (Toyota, Honda, Mazda), pay off the loan quickly, and drive it for 10+ years. New car depreciation is steep — most vehicles lose 15–25% of value in the first year.</div></div>
+    <div class="faq-item"><button class="faq-question">What do warning lights on my dashboard mean?<span class="icon">+</span></button><div class="faq-answer">Critical lights (address immediately): red oil can (oil pressure), red temperature gauge (engine overheating — pull over safely), battery symbol, brake warning light. Yellow/amber lights (address soon): check engine light (can indicate many things — get an OBD-II scan), tire pressure (TPMS), traction control, ABS. A steady check engine light vs. flashing means different things — flashing indicates a serious misfire and you should pull over. Auto parts stores (AutoZone, O'Reilly) will read error codes for free.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I jump-start a dead battery?<span class="icon">button class="faq-question">How do I jump-start a dead battery?<span class="icon">+</span></button><div class="faq-answer">Connect jumper cables in this order: red (positive) to dead battery's + terminal, red to working battery's + terminal, black (negative) to working battery's - terminal, black to an unpainted metal surface on the dead car (not the battery terminal — this prevents sparks near the battery). Start the working car, let it run 2–3 minutes, then try starting the dead car. After starting, drive for at least 20–30 minutes to recharge the battery. If the battery dies repeatedly, it needs replacement.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I find a trustworthy mechanic?<span class="icon">+</span></button><div class="faq-answer">Ask friends and family for recommendations — word of mouth is the best filter. Look for ASE-certified mechanics. Check Google and Yelp reviews, looking at how the shop responds to negative feedback. Avoid shops that pressure you into immediate additional repairs without showing you the problem. Always get a written estimate before work begins. For a new car, take it to the dealer for major repairs still under warranty but independent shops for routine maintenance (they're usually cheaper).</div></div>
+    <div class="faq-item"><button class="faq-question">How can I save money on gas?<span class="icon">+</span></button><div class="faq-answer">Use GasBuddy to find the cheapest nearby station. Keep tires properly inflated (underinflated tires reduce fuel efficiency by 0.5–3%). Avoid excessive idling. Accelerate and brake smoothly — aggressive driving can lower MPG by 15–30%. Remove heavy items from your trunk. Use the octane level your car manufacturer recommends — premium fuel in a regular car provides no benefit. A warehouse club membership (Costco, Sam's Club) for gas often saves $0.10–0.20/gallon.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TRANSPORTATION ═══════════════ -->
+<div class="section" id="transportation">
+  <div class="section-header">
+    <div class="section-label">Getting Around</div>
+    <div class="section-title">Transportation</div>
+    <p class="section-intro">Not everyone needs a car — and in many cities, not having one is actually cheaper and less stressful. Understanding your full range of transportation options helps you make smart, cost-effective decisions about how you get around.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I figure out if I really need a car?<span class="icon">+</span></button><div class="faq-answer">Factor in the true cost of car ownership: car payment, insurance ($1,000–2,000/year), maintenance (~$1,000/year), gas, and parking. This often totals $500–1,000+ per month. Compare this to your city's transit options, rideshare costs, and bike infrastructure. If you live in a walkable city with good public transit, going car-free can save you $5,000–12,000 annually. Many people in car-dependent areas do need a car, but it's worth running the numbers honestly.</div></div>
+    <div class="faq-item"><button class="faq-question">How does public transit (bus, subway, train) actually work?<span class="icon">+</span></button><div class="faq-answer">Get a transit card or use a payment app for your city's system. Download your city's transit app (or Google Maps works for most systems) for real-time schedules and routing. Learn your main lines — understanding 3–4 core routes covers most daily needs. Buy a monthly pass if you use transit regularly (typically 30–50% cheaper than single fares). Check for employer transit benefits — many companies subsidize transit costs pre-tax.</div></div>
+    <div class="faq-item"><button class="faq-question">Is biking a realistic commuting option?<span class="icon">+</span></button><div class="faq-answer">For distances under 5–10 miles with reasonable weather, biking is genuinely great — it's free (after the bike purchase), keeps you fit, avoids parking costs, and is often faster than driving in congested areas. A reliable commuter bike costs $300–600 new or less used. Get a good U-lock ($40–60). Wear a helmet. Study the bike infrastructure in your city — dedicated bike lanes make a massive difference. Electric bikes (e-bikes) make longer or hilly commutes much more accessible.</div></div>
+    <div class="faq-item"><button class="faq-question">When is it worth taking an Uber/Lyft vs. other options?<span class="icon">+</span></button><div class="faq-answer">Rideshares make sense for: late nights when transit doesn't run, airport trips with luggage, locations not served by transit, or occasional use when you don't own a car. They're expensive for daily commuting — a $15 Uber each way adds up to $600/month. Compare costs to transit, bike, or even a rental car for day trips. Use scheduled rides (cheaper than surge pricing) and compare Uber and Lyft prices since they often differ significantly for the same trip.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I navigate a new city's transportation system?<span class="icon">+</span></button><div class="faq-answer">Google Maps is your best friend — use the transit mode for directions including transfers and walk times. Download the city's official transit app for real-time updates and offline maps. For your first few trips, leave extra time and note landmarks at transfer points. Learn your local transport card early — it's usually cheaper than cash. Don't hesitate to ask transit staff; they're there to help.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the pros and cons of car sharing services (Zipcar, etc.)?<span class="icon">+</span></button><div class="faq-answer">Car sharing is ideal for people who need a car occasionally (a few times a month) but not daily. You pay hourly or daily, and gas and insurance are included. Much cheaper than owning a car if your usage is low. Cons: availability can be limited, you can't keep anything in the car, and it requires planning. Services like Zipcar, Turo (peer-to-peer), and local options are worth exploring if you live somewhere with good transit but occasionally need a car.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I travel safely using rideshare apps?<span class="icon">+</span></button><div class="faq-answer">Always verify the car's make, model, color, and license plate match the app before getting in. Confirm the driver's name — don't ask "are you [name]?"; instead ask "what name is the ride under?" Sit in the back seat for personal space and a quick exit. Share your trip status with a trusted contact. Trust your instincts — if something feels off, cancel the ride. Avoid accepting rides from people who say they're your driver but aren't on the app.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about long-distance bus and train travel?<span class="icon">+</span></button><div class="faq-answer">Greyhound, FlixBus, and Megabus cover most US intercity routes; book early for the best prices. Amtrak trains offer more comfort than buses and are great for medium distances, though they're often slower and pricier than flying for long distances. Bring snacks, entertainment, and a portable charger for long trips. For luggage, know what's included vs. fees. Arrive 30–45 minutes early for buses and at least an hour for trains in larger stations.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I get around without a license or car?<span class="icon">+</span></button><div class="faq-answer">Combine: walking for short distances, biking for medium distances, transit for longer urban trips, and rideshare for locations transit doesn't reach. In most cities, this combination handles 90%+ of daily needs. Electric scooters (Lime, Bird) and e-bikes fill the gap for the 1–3 mile range that's uncomfortable to walk. Grocery delivery (Instacart, Amazon Fresh) eliminates one of the biggest car-dependency drivers. The feasibility depends heavily on your city's infrastructure.</div></div>
+    <div class="faq-item"><button class="faq-question">What commuting options can I negotiate as part of a job?<span class="icon">+</span></button><div class="faq-answer">Ask about: transit benefits (many employers offer pre-tax transit/commuter benefits up to $315/month in 2023), remote work days (one WFH day per week saves 20% of commuting costs), flexible hours to avoid peak pricing and congestion, parking benefits or parking reimbursement, and bike-to-work programs. Pre-tax commuter benefits are especially valuable — they reduce both your income tax and payroll tax on that portion of your salary.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ TRAVEL ═══════════════ -->
+<div class="section" id="travel">
+  <div class="section-header">
+    <div class="section-label">Getting Around</div>
+    <div class="section-title">Travel</div>
+    <p class="section-intro">Travel is one of the most enriching things you can do as an adult — and it doesn't have to be expensive. Learning to plan, budget, and navigate travel confidently opens the whole world to you.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I find cheap flights?<span class="icon">+</span></button><div class="faq-answer">Use Google Flights as a starting point — its price calendar shows cheapest days to fly. Set price alerts for routes you're watching. Be flexible on dates: flying Tuesday/Wednesday is almost always cheaper than Friday/Sunday. Book domestic flights 1–3 months out; international flights 2–6 months out. Budget airlines (Spirit, Frontier, Ryanair in Europe) offer very cheap fares but charge for nearly everything else — read the fine print on bags.</div></div>
+    <div class="faq-item"><button class="faq-question">What documents do I need to travel internationally?<span class="icon">+</span></button><div class="faq-answer">A valid passport is required for all international travel (check expiration — many countries require 6 months validity beyond your trip). Some countries require a visa — check the US State Department website or your destination's embassy. For entry, have your return or onward ticket and accommodation details accessible. Keep copies of your passport and travel insurance in the cloud and with someone at home. Apply for or renew a passport 4–6 months before travel — processing can be slow.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I travel on a tight budget?<span class="icon">+</span></button><div class="faq-answer">The biggest costs are flights, accommodation, and food. On flights: use the strategies above and consider nearby airports. Accommodation: hostels (often $20–50/night), Couchsurfing, or house sitting for free stays. Airbnb can be cost-effective for groups. For food: eat where locals eat (away from tourist areas), cook occasionally if you have kitchen access, and avoid tourist-trap restaurants near major attractions. Travel slowly — fewer, longer stops reduce transit costs and let you find better value.</div></div>
+    <div class="faq-item"><button class="faq-question">What is travel insurance and do I need it?<span class="icon">+</span></button><div class="faq-answer">Travel insurance covers trip cancellation/interruption, medical emergencies abroad (very important — your US health insurance often doesn't cover international care), emergency evacuation, and lost luggage. For international trips, medical coverage is genuinely important — a hospital stay abroad can cost tens of thousands of dollars. Many travel credit cards include some travel insurance — check your card's benefits. Stand-alone travel insurance typically costs 5–7% of your trip cost.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I pack and what can I leave behind?<span class="icon">+</span></button><div class="faq-answer">The universal rule: pack half of what you think you need. Clothes can be washed and re-worn; most toiletries can be purchased at your destination. A carry-on only approach saves time, money, and flexibility. Key items: versatile clothing in a neutral color palette, universal power adapter for international travel, portable charger, backup credit card and some local currency, any prescription medications with documentation, and a good packing cube system. Leave expensive jewelry and anything you'd be devastated to lose at home.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I stay safe when traveling alone?<span class="icon">+</span></button><div class="faq-answer">Research your destination's specific risks before going. Share your itinerary with someone at home. Keep digital and physical copies of important documents. Use ATMs inside banks rather than on the street. Don't flash expensive items. Trust your instincts — if a situation feels wrong, leave. Stay in well-reviewed accommodations. Be aware of common scams at tourist hotspots. Keep your bag in front of you in crowds. Register with the US Smart Traveler Enrollment Program (STEP) for State Department alerts.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I use my phone abroad without huge fees?<span class="icon">+</span></button><div class="faq-answer">Options in order of convenience and cost: (1) International plan from your carrier (T-Mobile includes many countries at no extra cost; others charge $5–10/day). (2) eSIM from a provider like Airalo or aloSIM — often the cheapest option for international data. (3) Local SIM card purchased at your destination. (4) Use Wi-Fi only mode and WhatsApp/iMessage for communication. Always turn off cellular data before landing until you have a plan in place to avoid accidental roaming charges.</div></div>
+    <div class="faq-item"><button class="faq-question">What are travel credit cards and are they worth it?<span class="icon">+</span></button><div class="faq-answer">Travel cards earn points/miles on purchases that you redeem for flights, hotels, or transfers. Cards like Chase Sapphire Preferred, Capital One Venture, or American Express Gold offer strong value. Key benefits beyond rewards: no foreign transaction fees (important — regular credit cards often charge 3% on international purchases), travel protections (trip delay insurance, lost baggage), and sometimes airport lounge access. They're worth it if you'll travel even a few times per year and you pay your balance in full.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do if something goes wrong during a trip (lost passport, medical emergency)?<span class="icon">+</span></button><div class="faq-answer">Lost passport abroad: contact the nearest US Embassy or Consulate immediately — they can issue an emergency passport. Medical emergency: call local emergency services (know the local equivalent of 911) and contact your travel insurance provider. Missed flight: speak to airline staff at the gate immediately; airlines can often rebook you. Stolen wallet: cancel cards immediately via your bank's app, file a local police report, and contact your embassy if your passport was taken. Keep your insurance hotline number accessible before you travel.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I manage jet lag?<span class="icon">+</span></button><div class="faq-answer">Before travel: gradually shift your sleep schedule 2–3 days before departure toward your destination's time zone. On the plane: sleep according to destination time (use eye mask and earplugs), stay hydrated, and avoid alcohol. Upon arrival: get into local time immediately — stay awake until local bedtime even if you're exhausted. Get morning sunlight exposure, which resets your circadian rhythm. Avoid naps longer than 20 minutes in the first two days. Most people adjust in 2–4 days.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ HYGIENE ═══════════════ -->
+<div class="section" id="hygiene">
+  <div class="section-header">
+    <div class="section-label">Health & Body</div>
+    <div class="section-title">Hygiene</div>
+    <p class="section-intro">Personal hygiene is foundational — not just for health, but for confidence and how others perceive you. Building good daily habits sets the tone for how you feel in your own skin.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How often should I shower?<span class="icon">+</span></button><div class="faq-answer">Most dermatologists recommend showering every 1–2 days for most people. Daily showering is fine for those who are active or sweaty; over-showering can strip natural oils from skin and hair. What matters more is washing key areas: armpits, groin, and feet. On non-shower days, a washcloth refresh of these areas keeps you clean between full showers. There's no single universal answer — adjust based on activity level, climate, and skin type.</div></div>
+    <div class="faq-item"><button class="faq-question">What's a good daily skincare routine?<span class="icon">+</span></button><div class="faq-answer">A basic effective routine for beginners: Morning — gentle cleanser, moisturizer with SPF 30+. Evening — gentle cleanser, moisturizer. That's truly it to start. Sunscreen is the single most impactful anti-aging product that exists — use it daily. Add products one at a time if you want to address specific concerns (acne, dryness, hyperpigmentation). Be consistent for at least 4–6 weeks before judging results. Over-complicating leads to skin irritation.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with body odor effectively?<span class="icon">+</span></button><div class="faq-answer">Body odor is caused by bacteria breaking down sweat, not sweat itself. Washing thoroughly (especially armpits and groin) removes bacteria. Deodorant masks odor; antiperspirant reduces sweating (both are fine to use). Apply antiperspirant to clean, dry skin at night for maximum effectiveness — it works better than morning application. Natural fabric clothing breathes better than synthetics. Diet can affect body odor — strong foods like garlic and onions affect sweat for hours afterward.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I properly care for my teeth?<span class="icon">+</span></button><div class="faq-answer">Brush twice daily (morning and night) for 2 full minutes with fluoride toothpaste — use a soft-bristle brush or electric toothbrush. Floss at least once daily — this removes plaque and food from between teeth where your brush can't reach. Mouth rinse is optional but beneficial, especially fluoride or antibacterial rinse. Visit a dentist every 6 months for cleanings and checkups. Avoiding preventable cavities and gum disease now saves significant money and pain later.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I handle bad breath?<span class="icon">+</span></button><div class="faq-answer">The most common cause is bacteria on the tongue and between teeth. Brush your tongue every time you brush (or use a tongue scraper). Floss daily. Stay hydrated — dry mouth is a leading cause. Mouthwash helps temporarily. Some causes are dietary (coffee, garlic). If bad breath persists despite good oral hygiene, see a dentist — it can indicate gum disease, cavities, or medical issues. Sugar-free gum or mints are a quick fix but not a substitute for oral hygiene.</div></div>
+    <div class="faq-item"><button class="faq-question">What haircare basics should I know?<span class="icon">+</span></button><div class="faq-answer">Shampoo frequency depends on hair type: oily hair may need daily washing, drier or coarser hair can go 2–4 days between washes. Most people over-shampoo. Use conditioner every wash (skip the scalp and focus on mid-lengths to ends). Cold water rinse helps close the cuticle and add shine. Avoid heat tools when possible or use a heat protectant spray. Trim ends every 8–12 weeks to prevent split ends from worsening. A good haircut from a skilled stylist is an investment in looking put-together.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I take care of my nails?<span class="icon">+</span></button><div class="faq-answer">Keep fingernails trimmed to a consistent length and filed smooth. Toenails should be cut straight across (cutting the corners too deeply causes ingrown toenails). Clean under nails regularly. Moisturize cuticles — don't cut them, just push them back gently. Biting nails introduces bacteria and damages nail beds. If you get manicures, give nails a break between gel or acrylic applications to prevent damage and weakening.</div></div>
+    <div class="faq-item"><button class="faq-question">When should I see a doctor vs. handle something at home?<span class="icon">+</span></button><div class="faq-answer">Go to urgent care or your doctor: fever over 103°F, symptoms lasting more than 10 days, worsening rather than improving conditions, significant pain, symptoms that worry you. ER for: chest pain, difficulty breathing, severe allergic reactions, suspected broken bones, deep lacerations, or any neurological symptoms (sudden severe headache, loss of vision, slurred speech). Telehealth services are great for minor concerns like UTIs, minor infections, and prescription renewals without leaving home.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I establish care with a doctor if I don't have one?<span class="icon">+</span></button><div class="faq-answer">Start by finding doctors who accept your insurance using your insurer's provider search tool. Look for a primary care physician (PCP), general practitioner (GP), or internal medicine doctor for adults. Call to confirm they're accepting new patients. Schedule a "new patient" or "wellness" visit to establish care, even if you're healthy — having a doctor who knows your baseline is invaluable when something comes up. Do this before you need it, not during an illness.</div></div>
+    <div class="faq-item"><button class="faq-question">What's a good approach to managing health insurance?<span class="icon">+</span></button><div class="faq-answer">Understand your plan's key terms: premium (monthly cost), deductible (what you pay out-of-pocket before insurance kicks in), copay (fixed amount per visit), and out-of-pocket maximum (most you'll ever pay in a year). Use in-network providers to minimize costs — always verify before appointments. Take advantage of preventive care (annual physicals, vaccines, screenings) which is typically covered at 100%. Open enrollment typically happens once a year through your employer or healthcare.gov — don't miss it.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ GYM ═══════════════ -->
+<div class="section" id="gym">
+  <div class="section-header">
+    <div class="section-label">Health & Body</div>
+    <div class="section-title">Gym & Fitness</div>
+    <p class="section-intro">Starting a fitness routine as an adult is one of the best investments you can make in your long-term quality of life. You don't need to be an athlete — you just need to start and stay consistent.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I start going to the gym if I've never been before?<span class="icon">+</span></button><div class="faq-answer">Start simple — go 2–3 times per week with a basic routine rather than trying to do everything at once. Most gyms offer a free orientation session with a trainer — use it. Beginner programs like StrongLifts 5x5, GZCLP, or Couch to 5K (running) are proven, simple, and effective. The goal for your first month is to build the habit, not achieve dramatic results. Consistency over intensity — showing up is the entire battle early on.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between cardio and strength training?<span class="icon">+</span></button><div class="faq-answer">Cardio (aerobic exercise: running, cycling, swimming) strengthens your heart and lungs, burns calories, and improves endurance and mood. Strength training (lifting weights, bodyweight exercises) builds muscle, increases metabolism, improves bone density, and reshapes your body composition. Both are important for overall health. A balanced routine includes both. For general health, the CDC recommends 150 minutes of moderate cardio per week plus 2 strength sessions — much less than most people think is required.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I avoid injury when starting to work out?<span class="icon">+</span></button><div class="faq-answer">Start with lighter weights than you think you need — prioritize form over load. Learn proper technique before adding weight (YouTube's Alan Thrall, Jeff Nippard, and AthleanX have excellent form guides). Warm up for 5–10 minutes before lifting. Progress slowly — add weight or reps incrementally. Don't skip rest days; muscles grow during recovery, not during the workout. Most gym injuries come from ego-lifting (too heavy, too soon) or skipping warm-ups.</div></div>
+    <div class="faq-item"><button class="faq-question">Do I need to take supplements like protein powder?<span class="icon">+</span></button><div class="faq-answer">No — supplements are supplements to a good diet, not replacements. Most people can get adequate protein from food alone. Protein powder is a convenient way to hit protein targets if you're struggling to eat enough whole food sources (meat, eggs, dairy, legumes). Aim for 0.7–1g of protein per pound of bodyweight if you're training seriously. Creatine monohydrate is the only supplement with very strong evidence for strength and muscle — and it's cheap. Skip the expensive branded "fat burners" and pre-workouts.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I stay motivated to keep exercising?<span class="icon">+</span></button><div class="faq-answer">The key is finding activities you don't hate — not every fit person loves the gym. Rock climbing, dance classes, team sports, hiking, cycling, and martial arts all build fitness. Set process goals ("I will work out 3x per week") rather than only outcome goals ("I will lose 20 pounds"). Track workouts to see progress. Find a workout partner. Make it easy: gym bag packed the night before, gym on the route to work. Most people quit because they made it too hard, too soon, too often.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I choose a gym?<span class="icon">+</span></button><div class="faq-answer">Proximity is the most important factor — a gym 5 minutes away beats a better gym 20 minutes away in terms of actual attendance. Take advantage of trial memberships before committing. Consider hours, equipment availability, crowding patterns, class offerings, and cleanliness. Planet Fitness is fine for beginners at $10/month. Many people discover that a home gym (a few dumbbells, a mat, and a pull-up bar) or outdoor training is more sustainable than a gym membership they rarely use.</div></div>
+    <div class="faq-item"><button class="faq-question">How much sleep do I actually need for health and fitness?<span class="icon">+</span></button><div class="faq-answer">Adults need 7–9 hours of sleep per night. Sleep is when your body repairs muscle tissue, consolidates memory, regulates hormones (including cortisol and growth hormone), and strengthens the immune system. Chronic sleep deprivation increases injury risk, impairs workout performance, causes weight gain, and significantly harms mental health. There's no substitute for sleep — it's the highest-leverage health behavior, more impactful than most supplements combined.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I eat before and after a workout?<span class="icon">+</span></button><div class="faq-answer">Pre-workout (1–2 hours before): carbohydrates for energy + some protein. Simple options: banana + peanut butter, oatmeal, or a small rice and chicken meal. Avoid high-fat, high-fiber foods right before (they can cause GI discomfort). Post-workout (within 1–2 hours): protein + carbohydrates to replenish glycogen and support muscle repair. Options: protein shake + banana, Greek yogurt + fruit, eggs and toast. Hydration matters throughout — drink water before, during, and after exercise.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I work out at home with little or no equipment?<span class="icon">+</span></button><div class="faq-answer">Bodyweight training can be remarkably effective: push-ups, pull-ups, bodyweight squats, lunges, planks, and burpees cover most muscle groups. Apps like Nike Training Club offer structured bodyweight programs for free. A jump rope ($20) and resistance bands ($15–30) dramatically expand home workout options. YouTube channels like Chloe Ting, FitnessBlender, and ATHLEAN-X provide full programs for free. You don't need a gym — you need consistency.</div></div>
+    <div class="faq-item"><button class="faq-question">What is the best way to lose weight sustainably?<span class="icon">+</span></button><div class="faq-answer">Sustainable weight loss requires a moderate calorie deficit (300–500 calories below maintenance) while eating enough protein (to preserve muscle), combined with exercise (especially strength training). Crash diets and extreme restriction lead to muscle loss, metabolic adaptation, and rebound weight gain. Track food intake for a few weeks to understand your actual habits. Slow and steady (0.5–1 lb/week) is far more sustainable than rapid loss. Sleep, stress management, and walking more are often underrated.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MENTAL HEALTH ═══════════════ -->
+<div class="section" id="mentalhealth">
+  <div class="section-header">
+    <div class="section-label">Health & Body</div>
+    <div class="section-title">Mental Health</div>
+    <p class="section-intro">Mental health is health, full stop. The transition to independent adulthood is one of the most stressful periods many people face. Understanding your emotional landscape — and knowing when and how to get help — is one of the most important skills you'll ever develop.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I manage stress as an adult?<span class="icon">+</span></button><div class="faq-answer">The fundamentals: consistent sleep (7–9 hours), regular exercise, limiting alcohol (it worsens anxiety), and maintaining social connections are the four highest-impact stress reducers. For acute stress: box breathing (inhale 4 seconds, hold 4, exhale 4, hold 4) activates the parasympathetic nervous system quickly. Identify your stressors — some can be addressed practically, others require acceptance. Journaling, time in nature, and reduced news/social media consumption are also evidence-backed tools.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the difference between feeling sad and having depression?<span class="icon">+</span></button><div class="faq-answer">Sadness is a normal emotional response to difficult events — it's temporary and tied to specific circumstances. Depression is a clinical condition characterized by persistent low mood lasting 2+ weeks, loss of interest in things you used to enjoy, changes in sleep and appetite, difficulty concentrating, fatigue, and sometimes feelings of worthlessness or hopelessness. Depression often doesn't have a "reason" and doesn't lift with willpower. If symptoms persist or worsen, seeking professional evaluation is important — it's highly treatable.</div></div>
+    <div class="faq-item"><button class="faq-question">When should I consider therapy?<span class="icon">+</span></button><div class="faq-answer">Consider therapy when: you're struggling to function in daily life, you've been feeling consistently low, anxious, or overwhelmed for weeks or months, you've experienced trauma, you're using substances to cope, you're having relationship or communication difficulties, or simply when you want to understand yourself better. You don't have to be in crisis to benefit from therapy. Many people start therapy during transitions — starting a new job, moving, a relationship ending — as preventive mental health care.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I find affordable therapy?<span class="icon">+</span></button><div class="faq-answer">Options include: your employer's Employee Assistance Program (EAP), which often includes 6–10 free sessions; community mental health centers with sliding-scale fees; Open Path Collective (sessions for $30–80 for lower-income people); university training clinics with supervised graduate students (very affordable); and apps like BetterHelp or Talkspace (mixed reviews but more accessible). Many therapists offer sliding scale fees if you ask directly. Check your insurance's mental health parity — insurers must cover mental health similarly to physical health.</div></div>
+    <div class="faq-item"><button class="faq-question">What is anxiety and how do I manage it?<span class="icon">+</span></button><div class="faq-answer">Anxiety is your body's alarm system — useful in genuine danger, problematic when chronic. Physical symptoms include racing heart, tight chest, shallow breathing, and muscle tension. Techniques: diaphragmatic breathing, progressive muscle relaxation, cognitive reframing (questioning catastrophic thoughts), grounding exercises (5-4-3-2-1 technique: name 5 things you see, 4 you can touch, etc.), and exercise. Caffeine and alcohol significantly worsen anxiety in many people. For clinical anxiety disorder, therapy (particularly CBT) and/or medication are effective treatments.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with loneliness as a young adult?<span class="icon">+</span></button><div class="faq-answer">Loneliness is extremely common in young adulthood, especially after major transitions like college graduation or moving to a new city. It requires active effort: join recurring activities (sports leagues, book clubs, hobby groups, climbing gyms, classes) where you see the same people regularly — repeated exposure builds friendships. Reach out to existing connections proactively. Apps like Bumble BFF exist specifically for finding friends. Be patient — meaningful friendships typically take 50+ hours of interaction to form. Be the one who initiates.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I stop doom-scrolling and manage social media's effect on my mood?<span class="icon">+</span></button><div class="faq-answer">Remove social media apps from your home screen and keep them in folders to add friction. Set time limits (Screen Time on iPhone, Digital Wellbeing on Android). Don't use your phone in bed — charge it outside your bedroom. Curate your feeds aggressively — unfollow accounts that make you feel worse. Replace the habit with something else (reading, stretching, a short walk). The research is clear that passive social media consumption (scrolling others' content) negatively impacts mood; active engagement (posting, messaging friends) has less impact.</div></div>
+    <div class="faq-item"><button class="faq-question">What are healthy coping strategies vs. unhealthy ones?<span class="icon">+</span></button><div class="faq-answer">Healthy: exercise, talking to trusted friends or a therapist, journaling, time in nature, creative activities, proper sleep, mindfulness/meditation, engaging with your hobbies, and allowing yourself to feel emotions without acting on them impulsively. Unhealthy: excessive alcohol or substance use, avoidance and isolation, overworking to escape feelings, emotional eating or restriction, screen time as numbing, lashing out at others. Most people use a mix — the goal is noticing patterns and gradually replacing unhealthy coping with healthier alternatives.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I set and maintain healthy boundaries?<span class="icon">+</span></button><div class="faq-answer">Boundaries are limits you set about what behaviors you will and won't accept. Identify your limits first (physical, emotional, time, energy). Communicate them clearly, calmly, and directly: "I'm not able to talk about X" or "I need Y time to myself." Enforce them consistently — people test boundaries to see if you mean them. You don't need to over-explain, apologize, or justify. People who react badly to reasonable boundaries are showing you something important about the relationship. Boundaries protect your well-being and actually improve relationships.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do if I'm in a mental health crisis?<span class="icon">+</span></button><div class="faq-answer">If you're having thoughts of harming yourself or others, reach out immediately: call or text 988 (Suicide & Crisis Lifeline in the US), text HOME to 741741 (Crisis Text Line), go to your nearest emergency room, or call 911. Tell someone you trust what you're experiencing. These moments feel permanent but they're not — crisis is temporary and treatable. If you're supporting someone else in crisis, stay with them, listen without judgment, and help them access professional support. Ask directly "are you thinking about suicide?" — it does not plant the idea.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ FIRST AID ═══════════════ -->
+<div class="section" id="firstaid">
+  <div class="section-header">
+    <div class="section-label">Health & Body</div>
+    <div class="section-title">General First Aid</div>
+    <p class="section-intro">Knowing basic first aid is one of those skills you hope never to need but will be incredibly grateful you have. Many emergencies happen in the home, and a calm, informed response can genuinely save a life.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What should be in a basic first aid kit?<span class="icon">+</span></button><div class="faq-answer">Essentials: adhesive bandages in multiple sizes, sterile gauze pads and rolls, medical tape, antiseptic wipes and solution (hydrogen peroxide or Betadine), antibiotic ointment (Neosporin), tweezers, scissors, disposable gloves, a digital thermometer, pain relievers (ibuprofen and acetaminophen), antihistamines (Benadryl), an instant cold pack, and an emergency contact card. Keep one at home and one in your car. Check expiration dates annually and replace used items promptly.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I treat a cut or wound?<span class="icon">+</span></button><div class="faq-answer">Apply direct pressure with a clean cloth to stop bleeding — maintain steady pressure for 5–10 minutes without checking (checking restarts clotting). Once bleeding slows, rinse the wound thoroughly with clean water for several minutes. Apply antibiotic ointment and cover with a bandage. Change the bandage daily. Signs you need medical care: wound won't stop bleeding after 10–15 minutes of pressure, wound is deep or has gaping edges (may need stitches), it's a puncture wound (especially from rusty metal), or if you're unsure of your tetanus vaccination status.</div></div>
+    <div class="faq-item"><button class="faq-question">What do I do if someone stops breathing (CPR basics)?<span class="icon">+</span></button><div class="faq-answer">Call 911 immediately or have someone else call while you begin CPR. For adults: place the heel of one hand on the center of the chest, other hand on top. Push hard and fast — at least 2 inches deep at 100–120 compressions per minute (the beat of "Stayin' Alive"). If trained in rescue breathing, give 30 compressions then 2 breaths. If not trained, continue chest compressions until help arrives. An AED (automatic defibrillator) can be used by untrained bystanders — the device provides voice instructions. Take a certified CPR course — knowing it confidently saves lives.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I help someone who is choking?<span class="icon">+</span></button><div class="faq-answer">If the person can cough, speak, or breathe — encourage them to cough forcefully and don't interfere. If they cannot cough, speak, or breathe: stand behind them, give 5 firm back blows between the shoulder blades with the heel of your hand, then perform 5 abdominal thrusts (Heimlich maneuver): hands around the waist, fist above the navel, sharp inward-and-upward thrusts. Alternate back blows and abdominal thrusts. Call 911. For yourself alone: use abdominal thrusts on yourself or thrust your abdomen against a hard edge (chair back, countertop).</div></div>
+    <div class="faq-item"><button class="faq-question">How do I treat burns?<span class="icon">+</span></button><div class="faq-answer">Cool minor burns immediately with cool (not cold or ice) running water for 10–20 minutes. Do not use butter, oil, toothpaste, or ice — these worsen burns. Cover loosely with a clean non-stick bandage. Take ibuprofen for pain. Seek medical care for: burns larger than 3 inches, burns on the face, hands, feet, genitals, or major joints, deep burns (white/waxy/charred appearance), chemical or electrical burns, or any burn in children. Never pop burn blisters — they protect against infection.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do during an allergic reaction?<span class="icon">+</span></button><div class="faq-answer">Mild reaction (hives, itching, runny nose): antihistamines like Benadryl can manage symptoms. Monitor for progression. Severe reaction (anaphylaxis) — signs: throat swelling/difficulty breathing/swallowing, severe drop in blood pressure, rapid weak pulse, dizziness/loss of consciousness. Anaphylaxis requires epinephrine (EpiPen) immediately and a 911 call. Even if an EpiPen is used, always go to the ER because symptoms can return. People with known severe allergies should carry an EpiPen and ensure those around them know how to use it.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I treat a sprain or strain?<span class="icon">+</span></button><div class="faq-answer">Use RICE: Rest (stop using the injured area), Ice (apply for 20 minutes every 2–3 hours for the first 48 hours — always use a cloth between ice and skin), Compression (wrap with an elastic bandage to reduce swelling), and Elevation (keep the injured limb raised above heart level). Take ibuprofen for pain and inflammation. Seek medical care if: you heard a pop at the time of injury, weight bearing is impossible, swelling is severe, or symptoms don't improve within 48–72 hours (possible fracture).</div></div>
+    <div class="faq-item"><button class="faq-question">What should I do if I think someone is having a stroke?<span class="icon">+</span></button><div class="faq-answer">Remember FAST: Face drooping (ask them to smile — is one side drooping?), Arm weakness (ask them to raise both arms — does one drift down?), Speech difficulty (ask them to repeat a sentence — is it slurred or strange?), Time to call 911 immediately. Other signs: sudden severe headache, sudden vision problems, sudden confusion, loss of balance. Stroke treatment is time-critical — every minute without treatment can mean permanent disability. Do not drive them yourself unless there is truly no other option — call 911.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I treat heat exhaustion or heat stroke?<span class="icon">+</span></button><div class="faq-answer">Heat exhaustion (heavy sweating, weakness, cool/pale/clammy skin, fast/weak pulse, nausea): move to a cool location, loosen clothing, apply cool wet cloths, and sip cool water. If they don't improve within an hour, seek medical care. Heat stroke (hot/red/dry skin, rapid strong pulse, possible unconsciousness) — this is an emergency: call 911 immediately and cool them down by any means possible (cold water immersion is best, ice packs to neck/armpits/groin, cool water spray with fanning). Do not give fluids to an unconscious person.</div></div>
+    <div class="faq-item"><button class="faq-question">When should I call 911 vs. drive to urgent care?<span class="icon">+</span></button><div class="faq-answer">Call 911 for: suspected heart attack or stroke, serious difficulty breathing, severe allergic reaction, unconsciousness or unresponsiveness, suspected spinal injury, severe burns, uncontrolled bleeding, severe abdominal pain, overdose, or any situation where minutes truly matter. Urgent care for: non-emergency injuries (sprains, minor cuts needing stitches), infections, moderate illness, or anything where your regular doctor can't see you quickly. ER for serious but not immediately life-threatening: broken bones, severe pain, high fever, lacerations needing stitches that are not life-threatening.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ NUTRITION ═══════════════ -->
+<div class="section" id="nutrition">
+  <div class="section-header">
+    <div class="section-label">Health & Body</div>
+    <div class="section-title">Nutrition</div>
+    <p class="section-intro">You don't need a nutrition degree to eat well. The fundamentals of good nutrition are simpler than the wellness industry wants you to believe — and eating well doesn't have to be expensive.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What does a balanced diet actually look like?<span class="icon">+</span></button><div class="faq-answer">Fill half your plate with vegetables and fruits, a quarter with lean protein (chicken, fish, eggs, legumes, tofu), and a quarter with whole grains (brown rice, whole wheat bread, oats, quinoa). Include healthy fats (olive oil, avocado, nuts). Minimize ultra-processed foods, added sugars, and excessive sodium. Drink mostly water. Eat a variety of foods — no single food has everything. This isn't about perfection; it's about the overall pattern over days and weeks.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I eat healthy on a limited budget?<span class="icon">+</span></button><div class="faq-answer">Affordable nutrient-dense foods: eggs, canned beans and lentils, frozen vegetables and fruits (nutritionally equal to fresh), oats, brown rice, canned fish (tuna, sardines), peanut butter, bananas, sweet potatoes, and store-brand Greek yogurt. Cook at home from whole ingredients rather than pre-packaged meals. Reduce meat consumption — legumes provide protein at a fraction of the cost. Buy sale items and build meals around what's cheap that week. Reducing food waste (using what you buy) has a huge impact on food costs.</div></div>
+    <div class="faq-item"><button class="faq-question">How much water should I drink per day?<span class="icon">+</span></button><div class="faq-answer">The common "8 glasses a day" isn't a hard rule — water needs depend on body size, activity level, climate, and diet. A practical guide: drink enough that your urine is pale yellow (dark yellow indicates dehydration, completely clear suggests over-hydration). Most adults need 2–3 liters of total fluid daily, including what comes from food (~20% of intake). Drink more when exercising, in heat, or when ill. Coffee and tea count toward fluid intake despite being mildly diuretic.</div></div>
+    <div class="faq-item"><button class="faq-question">What are macronutrients and why do they matter?<span class="icon">+</span></button><div class="faq-answer">Macronutrients are the three main sources of calories: carbohydrates (primary energy source — grains, fruits, vegetables), proteins (building and repairing muscle and tissue — meat, eggs, dairy, legumes), and fats (essential for hormones, brain function, and nutrient absorption — oils, nuts, avocado, fatty fish). All three are necessary; no macronutrient is "bad." The problem is usually quantity and source — too many refined carbs or processed fats, not carbs or fats themselves.</div></div>
+    <div class="faq-item"><button class="faq-question">What are some quick, healthy meals for busy adults?<span class="icon">+</span></button><div class="faq-answer">Under 20 minutes: grain bowl (rice + canned beans + roasted veggies + hot sauce), stir-fried eggs with vegetables and toast, Greek yogurt with fruit and nuts, whole grain pasta with jarred tomato sauce and a side salad, canned tuna on crackers with fruit, or a smoothie (frozen fruit + spinach + protein powder + milk). Frozen vegetables make everything faster — add them to anything. Having a few "anchor meals" you can make automatically reduces decision fatigue enormously.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I read a nutrition label?<span class="icon">+</span></button><div class="faq-answer">Start with serving size — all values are per serving, and actual portion sizes often differ significantly. Check calories per serving. Limit: saturated fat, sodium (aim under 2,300mg/day total), and added sugars. Get enough: fiber (aim 25–38g/day), protein, and key vitamins/minerals. Ingredients list is often more informative — ingredients are listed by weight, so the first few dominate. Short ingredient lists with recognizable foods generally indicate less processing. The Percent Daily Value (%DV) column helps contextualize amounts: 5% or less is low, 20%+ is high.</div></div>
+    <div class="faq-item"><button class="faq-question">Does skipping breakfast actually matter?<span class="icon">+</span></button><div class="faq-answer">Contrary to long-standing advice, skipping breakfast is not inherently unhealthy. Intermittent fasting — eating within a defined window — is well-studied and works for many people. What matters more is total daily nutrition, not specific meal timing. That said, some people find that eating breakfast helps regulate hunger and energy throughout the day and prevents overeating later. If you're not hungry in the morning, skipping breakfast is fine for most healthy adults. Listen to your own hunger signals.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I handle eating well when I'm always short on time?<span class="icon">+</span></button><div class="faq-answer">Batch cooking is the most effective strategy — spend 1–2 hours on Sunday preparing components you'll use all week. Stock a smart pantry so you can always assemble something nutritious. Keep easy, healthy convenience items: pre-washed salad bags, rotisserie chicken, canned beans, frozen vegetables, hardboiled eggs, nut butter. Identify 5–7 meals you can make in 20 minutes and rotate them. Accept 80% healthy 80% of the time as a genuine success — the occasional fast food meal in a generally healthy diet is completely fine.</div></div>
+    <div class="faq-item"><button class="faq-question">What's the deal with "superfoods" and trendy diets?<span class="icon">+</span></button><div class="faq-answer">No single food is magic. "Superfood" is a marketing term, not a scientific category. Blueberries, kale, and salmon are nutritious, but so are many less glamorous foods. Most trendy diets (keto, Whole30, carnivore) work primarily by reducing overall calorie intake and eliminating ultra-processed foods. The "best" diet is the one you can maintain that prioritizes whole foods, adequate protein, plenty of vegetables, and reasonable portions. Extreme elimination diets often lead to nutritional deficiencies and unsustainable restriction cycles.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I avoid unhealthy emotional or stress eating?<span class="icon">+</span></button><div class="faq-answer">First, recognize triggers: stress, boredom, sadness, social pressure, or specific environments. Practice a 10-minute delay before eating when not physically hungry — the urge often passes. Identify what need you're actually trying to meet (comfort, stimulation, distraction) and find alternative behaviors that meet that need. Don't restrict excessively — deprivation increases emotional eating urges. Keep high-temptation foods out of easy reach. A therapist or dietitian specializing in intuitive eating can help with significant patterns.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ DATING ═══════════════ -->
+<div class="section" id="dating">
+  <div class="section-header">
+    <div class="section-label">Relationships</div>
+    <div class="section-title">Dating</div>
+    <p class="section-intro">Dating as an adult looks different than teen relationships. It involves clear communication, healthy boundaries, and knowing yourself well enough to recognize what you're actually looking for in a partner.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I approach dating apps effectively?<span class="icon">+</span></button><div class="faq-answer">Use quality photos (clear face, natural smile, photos showing your personality and interests). Write a bio that's specific — not "I like to travel and have fun" but something that reveals your actual personality and invites conversation. Be selective with matches and invest in meaningful conversations. Suggest moving off the app to a phone call or casual meet-up within 1–2 weeks — long app conversations often go nowhere. Use apps as a tool, not a measure of your worth — the matching algorithms are not a reflection of your desirability.</div></div>
+    <div class="faq-item"><button class="faq-question">What are green and red flags in early dating?<span class="icon">+</span></button><div class="faq-answer">Green flags: they're consistent between words and actions, they're curious about you and good at listening, they handle disagreements maturely, they're kind to service workers, they have close friendships and family relationships, they respect your time and boundaries. Red flags: love bombing (intense premature declarations of love), inconsistency, putting down exes excessively, boundary violations, stonewalling, excessive jealousy, lying about small things, and trying to isolate you from friends and family. Trust feelings of discomfort early.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I have the "define the relationship" (DTR) conversation?<span class="icon">+</span></button><div class="faq-answer">There's no perfect script — direct is better than oblique. Choose a calm, private moment (not while out with friends, not right before bed, not via text). Keep it simple: "I've been enjoying spending time with you and I was wondering how you see things between us." or "I'd like us to be exclusive — is that something you're interested in?" State what you want without ultimatums. Their response tells you everything you need to know. Avoiding this conversation to avoid risking rejection costs you more in the long run.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I reject someone kindly?<span class="icon">+</span></button><div class="faq-answer">Be clear and honest — vague non-answers ("I'm busy lately") are kinder in the short term but crueler overall because they leave people waiting and hoping. You don't owe a detailed explanation, but a clear message is respectful: "I've really enjoyed spending time with you, but I don't feel a romantic connection." After someone rejects you, give them space rather than trying to change their mind. Everyone deserves the truth delivered with kindness — it's one of the most mature social skills you can develop.</div></div>
+    <div class="faq-item"><button class="faq-question">What does a healthy romantic relationship look like?<span class="icon">+</span></button><div class="faq-answer">Characteristics: mutual respect and admiration, honest communication including about difficult things, trust, individual identities outside the relationship, ability to navigate conflict without contempt or stonewalling, shared values (not necessarily interests), supporting each other's growth, reciprocity (neither person giving far more than they receive), and genuine enjoyment of each other's company during ordinary moments. No relationship is without conflict — the health is in how conflict is handled, not whether it exists.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I get over a breakup?<span class="icon">+</span></button><div class="faq-answer">Allow yourself to grieve — suppressing emotions extends them. Limit contact with your ex, especially on social media. Lean on your support network. Return to habits that ground you: exercise, sleep, routines. Avoid numbing with excessive alcohol or rebound relationships. Journaling about what you learned and what you want differently is constructive after a breakup. Time genuinely heals — neuroscience confirms that romantic rejection activates the same brain regions as physical pain. The acute pain does diminish. There is no shortcut, but there are ways to move through it rather than getting stuck.</div></div>
+    <div class="faq-item"><button class="faq-question">How does dating change when you're actually looking for something long-term?<span class="icon">+</span></button><div class="faq-answer">Be clear with yourself about what you want and communicate that relatively early (not on the first date, but certainly in the first few). Get curious about compatibility on things that matter long-term: values, financial habits, attitudes toward children, family relationships, conflict styles, and life goals — not just chemistry. Chemistry fades; compatibility grows. People often discount someone with great long-term compatibility because of weak initial spark, and pursue people with strong initial chemistry who are incompatible in deeper ways. Both matter, but weight them appropriately.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about sexual health and consent?<span class="icon">+</span></button><div class="faq-answer">Consent must be: informed, enthusiastic, freely given, specific (consent to one act doesn't imply consent to others), and ongoing — it can be withdrawn at any time. Get tested for STIs regularly if you're sexually active — many STIs have no symptoms. Use protection consistently to reduce transmission risk. Know that you have the right to say no to anything at any time for any reason. Open communication with partners about STI status, protection preferences, and boundaries is a normal, healthy part of adult sexual relationships.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I maintain my own identity while in a relationship?<span class="icon">+</span></button><div class="faq-answer">Healthy relationships consist of two whole people, not two halves. Maintain friendships and activities you had before the relationship. Continue developing your individual goals and interests. Have opinions and desires that may differ from your partner's. Spend time alone and value it. Dependency — where one or both partners lose their separate identity — creates fragility; each person's happiness becomes contingent on the other. Partners who have full lives outside the relationship are actually more attractive and better partners because they're not relying on the relationship to fill every need.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I know if I'm in a toxic or abusive relationship?<span class="icon">+</span></button><div class="faq-answer">Warning signs of toxicity/abuse: you feel worse about yourself after interactions, your partner monitors your whereabouts or communications, they isolate you from friends and family, they use anger or guilt to control your behavior, they minimize or deny your experiences, they threaten you or destroy property, they make you feel afraid, or the relationship feels dramatically different in private vs. public. If multiple items on this list feel familiar, speak with a trusted person outside the relationship. The National Domestic Violence Hotline (1-800-799-7233 / text START to 88788) provides confidential support.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ HUMAN INTERACTION ═══════════════ -->
+<div class="section" id="interaction">
+  <div class="section-header">
+    <div class="section-label">Relationships</div>
+    <div class="section-title">Human Interaction</div>
+    <p class="section-intro">Communication is the single most important life skill nobody formally teaches. How you interact with people — colleagues, friends, family, strangers — shapes almost every area of your life in ways both obvious and subtle.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I make new friends as an adult?<span class="icon">+</span></button><div class="faq-answer">Adult friendship requires more intentional effort than it did when you were constantly around the same people in school. Strategies: join recurring activity groups (sports leagues, hobby clubs, volunteer organizations, climbing gyms, book clubs). Invest in weak ties — acquaintances you see regularly who could become friends with more investment. Be the one who suggests moving from activity-context to social context ("want to grab coffee after class?"). Follow up consistently — friendship is built through repeated, low-stakes contact over time, not single high-effort hangouts.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I have a difficult conversation without it becoming a fight?<span class="icon">+</span></button><div class="faq-answer">Choose the right timing — when both people are calm and not rushed. Use "I" statements: "I felt hurt when X happened" rather than "You always do Y." Stay focused on specific behaviors, not character judgments. Take breaks if emotions escalate (say "I need 20 minutes to calm down and then I want to continue this"). Listen to understand, not just to respond. Acknowledge their perspective before defending your own. The goal is resolution, not winning — approach it as a shared problem, not a competition.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I navigate disagreements with parents or family?<span class="icon">+</span></button><div class="faq-answer">The transition to adult autonomy requires renegotiating family dynamics, which takes time on both sides. Be clear but not combative about your boundaries and decisions. Choose battles carefully — not every disagreement needs to be addressed. Acknowledge their perspective and experience even when you disagree. "Thank you for your concern — I've thought about it carefully and I'm comfortable with my decision" is often more effective than extensive justification. Reduce rather than escalate tension where possible, especially around political and lifestyle topics.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I ask for help without feeling like a burden?<span class="icon">+</span></button><div class="faq-answer">Asking for help is a social skill, not a weakness. Most people genuinely like feeling useful and trusted. Be specific about what you need ("Could you review this email?" rather than "I need help with this work thing"). Acknowledge their time ("I know you're busy — only if you have capacity"). Reciprocate in your own way over time. The fear of being a burden is usually about your own feelings of self-worth, not an accurate read of others' feelings. Most people are more willing to help than we assume.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I handle a friendship that feels one-sided?<span class="icon">+</span></button><div class="faq-answer">First, check your perception — different people have different initiating styles, and the friend may not realize the imbalance. Try directly expressing it: "I value our friendship and I've noticed I've been the one reaching out lately — is everything okay?" If the pattern continues after you've communicated, make a conscious choice: reduce your investment to match their level, accept the relationship as a casual rather than close friendship, or let it fade. Not every friendship is meant to be equal or last forever. Resentment from silently keeping score helps no one.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I network without being awkward or fake?<span class="icon">+</span></button><div class="faq-answer">Think of networking as making friends in a professional context, not collecting contacts. Show genuine curiosity — ask people about their work and what they find interesting. Listen more than you talk. Give before asking — share a useful article, make an introduction, offer help. Follow up after meeting someone with something specific from your conversation. Build relationships when you don't need anything — the people who network only when job hunting are the ones who feel fake, because they are. Maintained relationships are infinitely more valuable than a large collection of people who don't know you well.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I get better at small talk?<span class="icon">+</span></button><div class="faq-answer">Small talk is a social warm-up, not a destination. Ask open-ended questions ("What's been keeping you busy lately?"), and listen actively — look for topics to explore further. Be willing to share small things about yourself (small talk is reciprocal). Accept some silences as normal. The goal isn't to say clever things; it's to create a comfortable enough atmosphere for both people to relax. Most people are too focused on what they're going to say next to notice if you said something imperfect. Genuine interest in the other person covers most social awkwardness.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I maintain friendships when life gets busy?<span class="icon">+</span></button><div class="faq-answer">Good friendships in adulthood are maintained by consistency, not frequency. Regular low-effort contact (a voice memo, a meme, a text about something that reminded you of them) maintains the bond between deeper hangouts. Put recurring plans in the calendar — monthly dinners, quarterly video calls — so they happen. Be responsive when friends reach out. Acknowledge major life events. Accept that some friendships are seasonal and geographic. Quality over quantity — 3–5 deep friendships maintained through intentional effort beat 30 shallow connections.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I apologize effectively when I've hurt someone?<span class="icon">+</span></button><div class="faq-answer">A real apology has these elements: acknowledgment of what you did ("I said something dismissive and hurtful"), taking responsibility without deflection ("I was wrong to say that"), expressing empathy for their experience ("I imagine that made you feel like I didn't value what you were going through"), and commitment to change ("I'm going to work on being more thoughtful"). A non-apology sounds like "I'm sorry you felt that way." Don't rush to defend your intentions — impact matters alongside intent. Give the other person space to respond without defending or explaining further.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I deal with difficult or toxic people I can't avoid?<span class="icon">+</span></button><div class="faq-answer">For people you must deal with (coworkers, family): keep interactions brief and task-focused when possible. Don't share personal information that can be used against you. Don't engage with attempts to bait or provoke. Grey rock method (being deliberately uninteresting and unreactive) is effective for people who seek drama. Document workplace incidents. For truly toxic relationships where there's a choice, set clear boundaries or limit contact. You cannot change difficult people — you can only change how you respond and how much access they have to you.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MARRIAGE ═══════════════ -->
+<div class="section" id="marriage">
+  <div class="section-header">
+    <div class="section-label">Relationships</div>
+    <div class="section-title">Marriage</div>
+    <p class="section-intro">Marriage is both a deeply personal commitment and a legal contract with real financial and legal implications. Going in informed — about both the emotional and practical dimensions — sets a foundation for a successful partnership.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">What are the legal effects of getting married?<span class="icon">+</span></button><div class="faq-answer">Marriage creates significant legal changes: joint property rights (depending on state), inheritance rights, hospital visitation rights, the ability to make medical decisions for a spouse, joint tax filing eligibility, shared liability for certain debts, and spousal Social Security benefits. In community property states (California, Texas, and others), assets and debts acquired during marriage are generally shared equally. Understanding these implications before marrying is important — especially if one partner has significant debt or assets.</div></div>
+    <div class="faq-item"><button class="faq-question">What topics should couples discuss seriously before getting married?<span class="icon">+</span></button><div class="faq-answer">Couples should discuss: children (whether, when, and how many), finances (spending habits, debt, financial goals, whether to combine money), where to live (city, proximity to family), religion and how to raise children if faiths differ, career priorities and trade-offs, expectations about household responsibilities, how to handle conflict, relationships with extended family, health and lifestyle habits, and what they each expect from the marriage itself. Disagreements on any of these aren't necessarily disqualifying — how you navigate them is what matters.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a prenuptial agreement and should I consider one?<span class="icon">+</span></button><div class="faq-answer">A prenup is a legal contract that defines how assets and debts will be handled if the marriage ends. It's especially worth considering if: one partner has significantly more assets or debt, one partner owns a business, there are children from a prior relationship, or there's an inheritance to protect. Prenups are not cynical — they're an explicit, mature financial conversation. Both parties need independent attorneys. Prenups must be voluntarily signed with full financial disclosure and reasonable terms to be enforceable.</div></div>
+    <div class="faq-item"><button class="faq-question">How do couples successfully manage finances together?<span class="icon">+</span></button><div class="faq-answer">Three common models: fully joint accounts (full transparency, shared goals), fully separate accounts (full autonomy, proportional bill-splitting), and a hybrid (joint account for shared expenses, personal accounts for individual spending). No model is universally correct — what matters is that both partners are transparent, have agreed on the approach, and have regular "money dates" to review finances together. Power imbalances where one partner controls all finances are a significant red flag. Financial infidelity (hiding money or spending) is one of the most damaging forms of dishonesty in relationships.</div></div>
+    <div class="faq-item"><button class="faq-question">What makes marriages succeed long-term?<span class="icon">+</span></button><div class="faq-answer">Research by John Gottman, who studied thousands of couples, identified key predictors: maintaining a high ratio of positive to negative interactions (5:1 is the "magic ratio"), avoiding the "Four Horsemen" (contempt, criticism of character, defensiveness, stonewalling), turning toward each other's bids for connection in daily life, maintaining genuine friendship and respect, and addressing problems rather than letting them fester. Successful long-term couples don't avoid conflict — they navigate it without contempt and repair quickly after arguments.</div></div>
+    <div class="faq-item"><button class="faq-question">When should couples consider couples therapy?<span class="icon">+</span></button><div class="faq-answer">Earlier is better — couples often wait 6+ years after problems start before seeking help, by which point damage has accumulated. Consider it when: you have the same arguments repeatedly without resolution, communication has broken down, there has been a breach of trust (infidelity, major lies), during major life transitions (having children, job loss, illness, loss of a parent), or as proactive "relationship maintenance" when things are generally good. It's far easier to address issues before they calcify. Premarital counseling is also an underutilized tool.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about wedding planning and costs?<span class="icon">+</span></button><div name="faq-item"><button class="faq-question">What should I know about wedding planning and costs?<span class="icon">+</span></button><div class="faq-answer">The average US wedding costs $30,000+ but this is heavily skewed by high-end weddings — most couples spend $10,000–20,000. Venue and catering typically account for 50% of costs. Set your budget before making any decisions, and decide your priorities early (where will you spend more; where will you spend less). Guest count is the single biggest lever on cost. Weekday and Sunday weddings cost significantly less than Saturday. All-inclusive venues simplify planning. Remember: the marriage matters more than the wedding — don't go into debt for a party.</div></div>
+    <div class="faq-item"><button class="faq-question">How does marriage affect taxes?<span class="icon">+</span></button><div class="faq-answer">Married couples can file jointly or separately. Filing jointly often results in a lower tax bill ("marriage bonus") — especially when incomes are significantly different. However, some high-income dual earner couples may face a "marriage penalty" where combined income pushes them into higher brackets. Compare both filing options each year using tax software. Update your W-4s at work after marriage to reflect your new status. You may also become eligible for various credits and deductions once married.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the most common reasons marriages fail?<span class="icon">+</span></button><div class="faq-answer">Gottman's research points to contempt as the single strongest predictor of divorce — treating a partner with disrespect, mockery, or disdain. Other major factors: poor communication patterns, financial conflict and secrecy, infidelity, growing apart due to neglecting the relationship, unresolved conflict that festers, addiction, and major unaddressed mental health issues. Many marriages don't fail because of dramatic events — they fade due to gradual disconnection, choosing comfort over engagement, and failing to continue investing in the relationship after the initial phase of falling in love.</div></div>
+    <div class="faq-item"><button class="faq-question">What practical things should I do after getting married?<span class="icon">+</span></button><div class="faq-answer">Administrative tasks after marriage: update your Social Security card if changing your name (do this first), then driver's license and passport. Update beneficiary designations on retirement accounts and life insurance (these override wills — check them). Draft or update wills. Review and update insurance policies (health, auto, home/renters). Consider life insurance if you have dependents or shared debt. Inform HR of your status change for tax withholding and benefits. Add your spouse to your bank accounts or establish joint accounts per your chosen financial model.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ CHILDREN ═══════════════ -->
+<div class="section" id="children">
+  <div class="section-header">
+    <div class="section-label">Relationships</div>
+    <div class="section-title">Children</div>
+    <p class="section-intro">Whether you're thinking about becoming a parent someday, or just want to understand what it actually involves, knowing what parenthood entails — emotionally, financially, and practically — helps you make one of life's biggest decisions with clear eyes.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I know if I'm ready to have children?<span class="icon">+</span></button><div class="faq-answer">There is no perfect readiness — most parents reflect that they weren't fully ready and that's normal. Factors worth honestly examining: financial stability (can you support a child without being under severe financial stress?), relationship stability, emotional readiness to prioritize someone else's needs above your own consistently, support system (family, friends, community), career and life goals, and genuine desire for parenthood vs. social or family pressure. Having children should be an active choice, not something that just happens by default or expectation.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the real financial costs of having a child?<span class="icon">+</span></button><div class="faq-answer">The USDA estimates raising a child to age 18 costs $300,000+ for a middle-income family (not counting college). Annual costs include: childcare ($10,000–30,000/year in most metro areas for an infant), food, clothing, healthcare, activities, and eventually education. The first year is often the most expensive due to equipment (crib, car seat, stroller, etc.) and parental leave income loss. This doesn't make children unaffordable — it means going in with eyes open and a plan, rather than assuming "it'll work out."</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about pregnancy and prenatal care?<span class="icon">+</span></button><div class="faq-answer">Prenatal care should begin in the first trimester (ideally 8–10 weeks). A typical pregnancy involves regular OB or midwife visits, prenatal vitamins (especially folic acid to prevent neural tube defects — ideally start before conception), ultrasounds, and genetic screenings. Lifestyle factors matter significantly: avoiding alcohol and smoking completely, limiting caffeine, eating nutritiously, and gentle exercise is generally encouraged. Every pregnancy is different — finding a provider you trust and feel comfortable asking questions of is one of the most important early decisions.</div></div>
+    <div class="faq-item"><button class="faq-question">What is parental leave and what are my rights?<span class="icon">+</span></button><div class="faq-answer">The US has no federal paid parental leave law — the Family and Medical Leave Act (FMLA) guarantees 12 weeks of unpaid leave for qualifying employees at companies with 50+ employees. Many states (California, New York, Massachusetts, etc.) have paid family leave programs. Employer policies vary widely — this is worth researching before accepting a job. Both parents can typically take leave. Plan your leave timeline before your due date, and understand your company's notification requirements and pay continuation during leave.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the basics of childcare options?<span class="icon">+</span></button><div class="faq-answer">Options include: daycare centers (structured, licensed, more oversight, waitlists often 6–12 months long for infant spots), family daycare (home-based, smaller groups, often less formal), nanny (in-home, most expensive but most flexibility), au pair (cultural exchange program — affordable but significant commitment), and family care (grandparents, relatives — can work wonderfully or add complications). Start researching childcare before the child is born — quality infant care in most cities has long waitlists. Tour facilities, check licensing, ask about staff turnover and child-to-staff ratios.</div></div>
+    <div class="faq-item"><button class="faq-question">How does having children change a relationship?<span class="icon">+</span></button><div class="faq-answer">Research consistently shows relationship satisfaction typically drops in the first 1–2 years after having a child — sleep deprivation, divided attention, identity shifts, and dramatically increased household labor all create friction. Couples who fare best: discuss division of responsibilities before the baby arrives, maintain deliberate connection despite exhaustion (even 10 minutes of focused conversation nightly), acknowledge each other's difficulties without competing over who has it worse, and maintain some individual adult identity outside the parent role. The relationship quality before having children largely predicts the relationship quality after.</div></div>
+    <div class="faq-item"><button class="faq-question">What financial accounts should I open for a child's future?<span class="icon">+</span></button><div class="faq-answer">529 Education Savings Plan: tax-advantaged account for education expenses — contributions grow tax-free and withdrawals for qualified education are tax-free. Can be opened by parents or grandparents. UTMA/UGMA Custodial Account: general investment account in the child's name, transferred to them at 18/21. Roth IRA for Kids: if the child has earned income (yes, even babysitting money counts), they can contribute to a Roth IRA — the compounding over decades makes this extraordinarily powerful. Even small early contributions make a significant impact through time.</div></div>
+    <div class="faq-item"><button class="faq-question">What do children need most from parents (beyond the basics)?<span class="icon">+</span></button><div class="faq-answer">Beyond physical needs, decades of developmental research highlights: secure attachment (consistent, responsive caregiving that builds a child's sense of safety), warmth and emotional validation, appropriate autonomy and independence as they grow, clear and consistent boundaries, genuine interest and presence, and modeling of the behaviors and values you want to instill. "Quality time" matters, but quantity of routine, low-key presence matters more than many parents realize. Children learn most from watching how their parents handle stress, disagreement, and daily life.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about birth control options as a young adult?<span class="icon">+</span></button><div class="faq-answer">Effective contraceptive options include hormonal methods (combined pill, progestin-only pill, patch, ring, injection, implant, hormonal IUD), non-hormonal methods (copper IUD, barrier methods like condoms), and natural methods with lower efficacy. Only condoms protect against STIs. The most effective methods are "set and forget" — IUDs and implants have >99% efficacy and require no daily action. Discuss options with a healthcare provider, as individual health factors and preferences matter. Emergency contraception (Plan B, ella) is available without a prescription for use after unprotected sex.</div></div>
+    <div class="faq-item"><button class="faq-question">What are some alternatives to biological parenthood?<span class="icon">+</span></button><div class="faq-answer">Adoption (domestic foster care adoption, domestic infant, and international, each with different processes and costs) is a deeply meaningful path to parenthood. Foster care involves caring for children whose parents are temporarily or permanently unable to do so. Fostering-to-adopt is possible but involves uncertainty. Fertility treatments (IVF, IUI) help those who want biological children but have fertility challenges. Co-parenting arrangements exist outside traditional partnership models. And choosing not to have children is a legitimate, fulfilling life choice that deserves the same respect as choosing parenthood.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ STYLING ═══════════════ -->
+<div class="section" id="styling">
+  <div class="section-header">
+    <div class="section-label">Style & Self</div>
+    <div class="section-title">Styling & Clothing</div>
+    <p class="section-intro">Developing a personal style isn't about following trends or spending a fortune. It's about building a functional wardrobe that works for your life, makes you feel confident, and doesn't require constant shopping.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I build a wardrobe from scratch on a budget?<span class="icon">+</span></button><div class="faq-answer">Start with versatile basics in neutral colors (black, white, navy, grey, camel) that mix easily. Essential pieces: well-fitting jeans, neutral t-shirts, one dress shirt or blouse, a clean pair of sneakers and one pair of dress shoes, a solid-colored sweater, a versatile jacket, and a few pairs of solid-colored trousers or pants. Thrift stores, Poshmark, eBay, and Depop offer significant discounts on quality items. Buy fewer, better quality pieces that last rather than many cheap items that fall apart quickly. Fit is more important than brand or price.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a capsule wardrobe?<span class="icon">+</span></button><div class="faq-answer">A capsule wardrobe is a curated collection of essential, versatile pieces that all work together, creating many outfits from few items. Typically 20–40 items total. The advantages: less decision fatigue, less clutter, better quality per item, and more intentional purchases. Start by auditing what you already own, identifying items you actually wear, and noting gaps. A good capsule contains about 60% basics and 40% statement or expressive pieces. It doesn't have to be boring — it should express your personal aesthetic within a practical, cohesive system.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I figure out what fits me well?<span class="icon">+</span></button><div class="faq-answer">Learn your measurements (chest, waist, hips, inseam, sleeve length). For tops: shoulders should sit at the edge of your shoulder joint. For pants: there should be no pulling at the thighs or bunching at the crotch, and the waistband shouldn't gap at the back. For suits: the collar should hug the neck without gaping. Fit can transform a $20 item into something that looks designer — a good local tailor can alter most items for $10–40. Trying to "grow into" clothes or buying items that don't quite fit is one of the most common wardrobe mistakes.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I dress appropriately for a professional environment?<span class="icon">+</span></button><div class="faq-answer">Dress codes range: business formal (suit and tie/formal dress), business casual (dress pants, collared shirts, blouses — no jeans), smart casual (neat jeans acceptable, no athletic wear), and casual (near anything goes). When uncertain, observe what colleagues wear and dress slightly above average. When in doubt for an interview, slightly overdressing shows effort. Clean, well-fitting, pressed clothing in conservative cuts and neutral colors creates a professional impression across most industries. Personal style can be expressed within dress code parameters through accessories, colors, and details.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I shop sustainably and ethically without spending a fortune?<span class="icon">+</span></button><div class="faq-answer">The most sustainable clothing is what you already own — start by fully utilizing what's in your closet before buying. Second-hand shopping (thrift stores, Poshmark, eBay, ThredUp, Depop, The RealReal for designer) is inherently more sustainable and often dramatically cheaper. Buy fewer, higher quality pieces from companies with ethical manufacturing standards rather than fast fashion that falls apart quickly. Care for your clothes properly to extend their life. Every piece you don't buy has zero environmental impact.</div></div>
+    <div class="faq-item"><button class="faq-question">What are the most versatile clothing items worth investing in?<span class="icon">+</span></button><div class="faq-answer">Items worth spending more on because you'll wear them constantly: a well-fitting pair of dark jeans, quality leather or leather-look shoes in black and/or brown, a tailored blazer or structured jacket, a classic trench or wool coat (one coat worn for years beats five cheap ones), quality white t-shirts (they do deteriorate and need regular replacement), and a well-fitting suit if your work or social life warrants it. Basics that touch your body and face (socks, underwear, base layers) are also worth paying more for comfort and durability.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I find my personal style?<span class="icon">+</span></button><div class="faq-answer">Create a mood board (Pinterest works well) of outfits you genuinely love from various sources. Look for patterns: what silhouettes, colors, and aesthetics appear repeatedly? Notice what you feel most confident in — not what you think you should wear. Your style should feel like an authentic expression, not a costume. Try one new style element at a time (a bold color, a different silhouette) rather than a total overhaul. Personal style evolves — what felt right at 18 will shift naturally. The goal is to feel like yourself, not a trend.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I maintain and care for nicer clothing pieces?<span class="icon">+</span></button><div class="faq-answer">Hang structured pieces (blazers, coats, dress pants) after wearing to reshape. Use proper wooden or velvet hangers — wire hangers distort shoulders. Dry clean sparingly (it wears fabric down — hand wash when the label permits). Store seasonal clothes in breathable garment bags with cedar blocks. Treat stains immediately. Learn basic repairs: sewing on a button, fixing a hem with fashion tape or iron-on hem tape. Polish leather shoes regularly and use shoe trees to maintain shape. Properly maintained quality clothing lasts decades.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I wear to a job interview?<span class="icon">+</span></button><div class="faq-answer">Research the company's culture and dress one notch above what employees typically wear. For corporate/finance/law: business formal — a suit in navy, grey, or black, conservative tie (men), or a tailored dress or suit (women). For tech/creative industries: business casual to smart casual. For retail or trade jobs: neat, clean, and professional is enough. Avoid strong perfume/cologne (people can be sensitive). Ensure clothes are freshly cleaned and pressed, shoes are clean, and nothing is distracting. Your goal is for the interviewer to remember your conversation, not your outfit.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I stop impulse buying clothes I never wear?<span class="icon">+</span></button><div class="faq-answer">Before buying any item, ask: "What 5 things do I already own that this works with?" If you can't name 5, it won't fit into your wardrobe. Implement a 48-hour waiting period for non-essential purchases — most impulse urges fade quickly. Unsubscribe from retailer emails and avoid browsing online shops when bored. Audit your closet twice a year and note what you actually reach for — this pattern reveals your real style versus your aspirational style. Track clothing purchases for one month; most people are shocked by the total.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ HOBBIES ═══════════════ -->
+<div class="section" id="hobbies">
+  <div class="section-header">
+    <div class="section-label">Style & Self</div>
+    <div class="section-title">Hobbies</div>
+    <p class="section-intro">Hobbies aren't frivolous extras — they're essential for wellbeing, creativity, and identity. Adults who maintain interests outside of work consistently report higher life satisfaction and resilience. Finding and protecting time for what you love is a skill in itself.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I find hobbies as an adult?<span class="icon">+</span></button><div class="faq-answer">Experiment broadly and cheaply first — borrow books on topics, watch free YouTube tutorials, attend one class or meetup before buying equipment. Revisit childhood interests: things you loved before others told you they weren't practical often resurface with adult depth. Try physically different categories: something active, something creative, something social, something contemplative. You're not committing — you're exploring. Many people give up too quickly on hobbies when they're bad at them initially; the discomfort of being a beginner is a feature, not a sign to quit.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I make time for hobbies with a busy schedule?<span class="icon">+</span></button><div class="faq-answer">Time for hobbies is made, not found. Schedule it like an appointment. Start small — even 20 minutes daily for a creative hobby is substantial over a year. Audit your actual time: most people spend 2–4 hours daily on screens without conscious choice. Combine hobbies with other activities where possible (audiobooks while commuting, podcasts while cooking). Say no to activities that drain rather than fill you. Work culture that glorifies busyness makes protecting leisure time feel guilty — resist this. Hobbies are not rewards you earn; they're necessary inputs for a sustainable life.</div></div>
+    <div class="faq-item"><button class="faq-question">What are some low-cost or free hobbies worth trying?<span class="icon">+</span></button><div class="faq-answer">Free or near-free: reading (library cards are free and include e-books and audiobooks), hiking and outdoor activities, writing, drawing and sketching, learning an instrument (YouTube tutorials), cooking, photography (even with a smartphone), journaling, language learning (Duolingo, language exchange apps), chess, yoga (YouTube), gardening (starts very cheaply), volunteering, podcasting, and birdwatching. Many expensive-seeming hobbies (photography, cycling, music) can be started very affordably with secondhand equipment before committing to upgrades.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I get better at a hobby without getting discouraged?<span class="icon">+</span></button><div class="faq-answer">Manage expectations: all skill-building involves a frustrating "valley" where you can perceive quality (you know good from bad) before you can produce quality. This gap is the hardest phase. Focus on process over outcomes — enjoy the act of doing rather than evaluating results. Track progress against your own past work, not professionals. Consume a lot of work in your hobby field to develop taste. Find community — others at a similar level are motivating and normalizing. The people who become excellent at things are usually just the ones who kept going through the uncomfortable early phase.</div></div>
+    <div class="faq-item"><button class="faq-question">Should I try to monetize my hobby?<span class="icon">+</span></button><div class="faq-answer">Turning a hobby into income can be deeply fulfilling — but it changes the relationship to the activity. What was intrinsically motivated becomes extrinsically motivated, and some people find the joy diminishes. Consider what you value about the hobby: is it the pure creative expression, or would you enjoy it more if it supported you financially? Test monetization in small ways before going all-in. Have at least one hobby that remains purely yours, with no audience and no income — this protects a space for genuine play and restoration that income-generating activities can't replicate.</div></div>
+    <div class="faq-item"><button class="faq-question">What hobbies are good for mental health and stress relief?<span class="icon">+</span></button><div class="faq-answer">The best research supports: exercise (any form), time in nature, creative expression (music, writing, visual art), meditation and mindfulness practices, social hobbies that build community, and activities that produce "flow" — complete absorption where self-consciousness disappears. Gardening has particularly strong evidence for mental health benefits. Reading fiction improves empathy and reduces stress. The specific hobby matters less than regularity and whether it produces genuine absorption and pleasure. Activities where you focus outward (rather than ruminate inward) are generally more restorative.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I commit to learning something new when I keep quitting?<span class="icon">+</span></button><div class="faq-answer">Set process goals rather than outcome goals: "I will practice guitar 15 minutes daily" rather than "I will learn 10 songs." Schedule practice at the same time each day — habit stacking (practicing immediately after an established routine, like eating breakfast) is more reliable than willpower-based scheduling. Lower the barrier as much as possible — instrument in a visible, accessible place; gear ready to go. Accept the "dip" — most people quit right before a breakthrough. Give new skills at least 3 months of consistent practice before genuinely evaluating whether they're for you.</div></div>
+    <div class="faq-item"><button class="faq-question">What are good social hobbies for meeting people?<span class="icon">+</span></button><div class="faq-answer">Hobbies with built-in community: adult recreational sports leagues (most cities have soccer, kickball, volleyball, ultimate frisbee, softball leagues), rock climbing (the culture is extremely social), board game cafés and game nights, community theater, choir or band, book clubs, running clubs, dance classes, martial arts, improv comedy, volunteer work, coding bootcamps, community gardens, cooking classes, and hackathons. The most effective friend-making hobbies have two qualities: they repeat weekly (consistent exposure) and require interaction (not just parallel activity).</div></div>
+    <div class="faq-item"><button class="faq-question">How do I balance multiple hobbies without feeling stretched?<span class="icon">+</span></button><div class="faq-answer">The concept of "seasons" helps: rather than doing everything simultaneously, dedicate seasons to different hobbies. Spring might focus on cycling; winter might shift to a reading and writing focus. This allows depth without guilt. Identify your 1–2 core hobbies that stay constant, and rotate supporting hobbies around them. Accept that you'll have periods of less engagement with any given hobby — life cycles. The goal is that hobbies enrich your life rather than creating another list of obligations you feel guilty about not keeping up with.</div></div>
+    <div class="faq-item"><button class="faq-question">What are some hobbies that also build useful skills?<span class="icon">+</span></button><div class="faq-answer">Hobbies that build marketable or life-practical skills: programming (coding), writing (communication, research), photography (visual storytelling, post-processing), cooking (nutrition, creativity, practicality), woodworking or metalworking (spatial reasoning, craftsmanship), language learning (cognition, cultural intelligence, career value), personal finance and investing (financial literacy), improv comedy (public speaking, listening, adaptability), homebrewing (chemistry, patience), and blogging or podcasting (content creation, marketing). The key is that the hobby is genuinely enjoyable first — trying to "gamify" every activity into productivity undermines the restorative function of leisure.</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════ DIGITAL LIFE ═══════════════ -->
+<div class="section" id="digital">
+  <div class="section-header">
+    <div class="section-label">Style & Self</div>
+    <div class="section-title">Digital Life</div>
+    <p class="section-intro">Your digital life — your accounts, data, online presence, and screen habits — is increasingly as important as your physical one. Good digital hygiene protects you financially, professionally, and personally.</p>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><button class="faq-question">How do I protect myself from online scams?<span class="icon">+</span></button><div class="faq-answer">Common scams to know: phishing (fake emails/texts impersonating banks or services asking for credentials), tech support scams (pop-ups claiming your computer is infected), romance scams, job offer scams, and "grandparent scams." Rule of thumb: no legitimate institution will ask for your password, ask you to pay via gift cards, or create extreme urgency. When in doubt, call the organization directly using a number from their official website (not one given in a suspicious message). If it seems too good to be true, it is.</div></div>
+    <div class="faq-item"><button class="faq-question">What is a strong password and how do I manage them?<span class="icon">+</span></button><div class="faq-answer">A strong password is long (12+ characters), unique to each site, and random (not based on words or personal info). Using the same password on multiple sites means one breach compromises all your accounts. The solution: a password manager (1Password, Bitwarden, or Apple Keychain) generates and stores unique passwords for every site — you only memorize one master password. Enable two-factor authentication (2FA) everywhere it's offered, especially email, banking, and social media. This alone prevents the vast majority of account compromises.</div></div>
+    <div class="faq-item"><button class="faq-question">What should my digital footprint look like as a young adult?<span class="icon">+</span></button><div class="faq-answer">Assume employers, landlords, and dates will Google you. Search your own name and see what comes up. Your LinkedIn should be professional and current. Make private the social media posts you wouldn't want a future employer or date to see — or simply don't post things you'd be embarrassed by. Consistent, positive professional presence (LinkedIn, perhaps a personal website or portfolio) is an asset. Old embarrassing content can often be removed by contacting platforms or using Google's "removal request" tool for outdated information.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I manage my privacy on social media?<span class="icon">+</span></button><div class="faq-answer">Audit privacy settings on every platform annually — they change without notice. Limit what's publicly visible (your location, employer, relationships, and home neighborhood are sensitive data points). Be thoughtful about what you post permanently vs. ephemerally. Review connected apps with access to your accounts and remove those you don't use. Consider that "private" accounts aren't truly private — screenshots exist. The general rule: post nothing you wouldn't be comfortable with your boss, parents, and a future stranger reading years from now.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I maintain a healthy relationship with my phone?<span class="icon">+</span></button><div class="faq-answer">Use Screen Time (iPhone) or Digital Wellbeing (Android) to understand your actual usage — most people underestimate it significantly. Set app limits for highest-use apps. Establish phone-free zones (bedroom, dining table). Keep your phone out of the bedroom at night — use a separate alarm clock. Disable non-essential notifications; constant interruptions fragment attention and increase anxiety. Batch-check messages and email at scheduled times rather than responding instantly. The goal isn't abstinence but intentionality — using your phone when you choose to, not whenever it calls for attention.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about email management?<span class="icon">+</span></button><div class="faq-answer">A few simple systems: Unsubscribe immediately from marketing emails you don't read. Use folders or labels for categories that matter to you. Process your inbox to "zero" regularly using the system: Delete (no value), Do (takes under 2 minutes — do now), Delegate, or Defer (schedule it). Use filters to auto-sort categories. For professional emails: respond within 24 hours when possible, use clear subject lines, and keep messages concise. Use a professional email address for work and job applications (firstname.lastname@gmail.com rather than coolcat2004).</div></div>
+    <div class="faq-item"><button class="faq-question">What are my digital rights and what should I know about data privacy?<span class="icon">+</span></button><div class="faq-answer">You have more rights than you might think in the US and especially in Europe (GDPR). You can request deletion of your data from many companies. California residents have CCPA rights. You can opt out of data broker sites that sell your personal information (use DeleteMe or manually opt out of major brokers). Read privacy policies at least for services holding your most sensitive data. Use HTTPS-secured websites (padlock icon). Consider a VPN for sensitive browsing on public Wi-Fi. The trade-off of "free" services is typically your data — know what you're exchanging.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I back up my important digital files?<span class="icon">+</span></button><div class="faq-answer">Follow the 3-2-1 backup rule: 3 copies of important data, on 2 different storage types (e.g., internal drive + external hard drive), with 1 copy offsite (cloud backup). For most people this means: automatic cloud backup (iCloud, Google One, Backblaze) plus periodically backing up to an external hard drive. Photos are often the most irreplaceable digital asset — make sure they're backed up automatically. Critical documents (passport photos, tax returns, financial records) should be stored in secure cloud storage and optionally printed and stored physically.</div></div>
+    <div class="faq-item"><button class="faq-question">What should I know about using AI tools and chatbots?<span class="icon">+</span></button><div class="faq-answer">AI assistants are powerful tools for drafting, brainstorming, research, coding, and explanation. Know their limitations: they can produce confident-sounding misinformation (this is called "hallucination"), they have knowledge cutoff dates, and they can have biases embedded in their training. Always verify important claims from AI against authoritative sources. Don't share sensitive personal information (Social Security numbers, passwords, detailed financial information) with AI chatbots. AI is a tool that augments your thinking — not a replacement for critical evaluation.</div></div>
+    <div class="faq-item"><button class="faq-question">How do I establish a professional online presence?<span class="icon">+</span></button><div class="faq-answer">Key platforms: LinkedIn (most important for most careers — complete profile with photo, summary, experience, and skills), a personal website or portfolio (especially important for creative, technical, or freelance work), and optionally a professional presence on platforms relevant to your field (GitHub for developers, Behance for designers, etc.). Be consistent: use the same professional photo and name across platforms. Post occasionally about your work, interests, or industry — this builds your professional identity over time. Even a basic "digital business card" website significantly elevates your professional credibility.</div></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p>So I'm Becoming an Adult… Now What? &nbsp;·&nbsp; A practical guide to independent life.</p>
+  <p style="margin-top:6px; opacity:0.6;">This guide is for general informational purposes. For medical, legal, or financial decisions, consult qualified professionals.</p>
+</footer>
+
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: document.querySelector('nav').offsetTop, behavior: 'smooth' });
+    }
+    // Update nav active states
+    document.querySelectorAll('.nav-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.dataset.target === id) b.classList.add('active');
+    });
+    // Deactivate dropdown parents (can't easily determine which dropdown is parent)
+  }
+
+  // Nav buttons (non-dropdown)
+  document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => showSection(btn.dataset.target));
+  });
+
+  // Dropdown items
+  document.querySelectorAll('.dropdown-menu button[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => showSection(btn.dataset.target));
+  });
+
+  // Home grid cards
+  document.querySelectorAll('.home-card[data-target]').forEach(card => {
+    card.addEventListener('click', () => showSection(card.dataset.target));
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>
