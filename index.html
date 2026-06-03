@@ -125,22 +125,22 @@
 
   /* ── DROPDOWN ── */
   .dropdown {
-    position: relative;
+    position: static;
   }
   .dropdown-menu {
     display: none;
-    position: absolute;
-    top: calc(var(--nav-height) - 2px);
-    left: 0;
+    position: fixed;
+    top: var(--nav-height);
+    left: auto;
     background: var(--ink);
-    border: 1px solid rgba(212,130,26,0.4);
-    border-top: 2px solid var(--amber);
-    min-width: 200px;
-    z-index: 200;
-    padding: 6px 0;
+    border: 1px solid rgba(212,130,26,0.5);
+    border-top: 3px solid var(--amber);
+    min-width: 220px;
+    z-index: 999;
+    padding: 8px 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35);
   }
-  .dropdown:hover .dropdown-menu,
-  .dropdown:focus-within .dropdown-menu {
+  .dropdown-menu.open {
     display: block;
   }
   .dropdown-menu button {
@@ -148,18 +148,18 @@
     width: 100%;
     background: none;
     border: none;
-    color: rgba(250,247,242,0.75);
+    color: rgba(250,247,242,0.85);
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     font-weight: 400;
     text-align: left;
-    padding: 10px 18px;
+    padding: 12px 20px;
     cursor: pointer;
     transition: background 0.15s, color 0.15s;
     white-space: nowrap;
   }
   .dropdown-menu button:hover {
-    background: rgba(212,130,26,0.15);
+    background: rgba(212,130,26,0.18);
     color: var(--amber-light);
   }
 
@@ -935,6 +935,28 @@
   // Nav buttons (non-dropdown)
   document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
     btn.addEventListener('click', () => showSection(btn.dataset.target));
+  });
+
+  // Dropdown toggle — click to open, position using getBoundingClientRect
+  document.querySelectorAll('.dropdown').forEach(dropdown => {
+    const trigger = dropdown.querySelector('.nav-btn');
+    const menu = dropdown.querySelector('.dropdown-menu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = menu.classList.contains('open');
+      document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+      if (!isOpen) {
+        const rect = trigger.getBoundingClientRect();
+        menu.style.left = rect.left + 'px';
+        menu.classList.add('open');
+      }
+    });
+  });
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
   });
 
   // Dropdown items
